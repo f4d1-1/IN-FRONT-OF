@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>IN FRONT OF.. — Barista Terminal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Tajawal:wght@300;400;500;700;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- ── ORDER HISTORY MODAL ── -->
+    <div id="historyModal" class="fixed inset-0 z-[150] hidden items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-md" onclick="closeHistoryModal()"></div>
+        <div class="glass-strong w-full max-w-4xl max-h-[85vh] overflow-hidden flex flex-col relative z-10 !rounded-3xl border border-white/10">
+            <!-- Modal Header -->
+            <div class="p-6 border-b border-white/5 flex justify-between items-center">
+                <h2 class="font-black text-xl flex items-center gap-2">
+                    📋 <span class="en-only">Order History</span><span class="ar-only">سجل الطلبات</span>
+                </h2>
+                <button onclick="closeHistoryModal()" class="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 transition-colors text-sm font-bold select-none">✕</button>
+            </div>
+            <!-- Modal Body / Table -->
+            <div class="p-6 overflow-y-auto flex-grow">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-start text-xs border-collapse">
+                        <thead>
+                            <tr class="border-b border-white/10 opacity-50 font-bold text-start">
+                                <th class="py-3 px-2 text-start"><span class="en-only">Order</span><span class="ar-only">الطلب</span></th>
+                                <th class="py-3 px-2 text-start"><span class="en-only">Time</span><span class="ar-only">الوقت</span></th>
+                                <th class="py-3 px-2 text-start"><span class="en-only">Customer</span><span class="ar-only">العميل</span></th>
+                                <th class="py-3 px-2 text-start"><span class="en-only">Items</span><span class="ar-only">الأصناف</span></th>
+                                <th class="py-3 px-2 text-start"><span class="en-only">Total</span><span class="ar-only">المجموع</span></th>
+                                <th class="py-3 px-2 text-start"><span class="en-only">Status</span><span class="ar-only">الحالة</span></th>
+                                <th class="py-3 px-2 text-start"><span class="en-only">Barista Note</span><span class="ar-only">تحديث الباريستا</span></th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody" class="divide-y divide-white/5">
+                            <!-- Filled dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        infrontof: { accent: '#135c51', dark: '#080c0a', warm: '#fbf9f4' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body, .glass, nav, div, p, span, h1, h2, h3, h4, button, section, footer, input, textarea {
+            transition: background-color 0.5s cubic-bezier(0.4,0,0.2,1),
+                        border-color 0.5s cubic-bezier(0.4,0,0.2,1),
+                        color 0.5s cubic-bezier(0.4,0,0.2,1),
+                        box-shadow 0.5s cubic-bezier(0.4,0,0.2,1);
+        }
+
+        body {
+            background: #0c0b09;
+            background-image: radial-gradient(ellipse 120% 60% at 50% -10%, #0d2822 0%, transparent 70%);
+            color: #f0ebe3;
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+        html.light body {
+            background: #faf8f4;
+            background-image: radial-gradient(ellipse 120% 60% at 50% -10%, #e8ddd0 0%, transparent 70%);
+            color: #1a1713;
+        }
+        html[lang="ar"] body { font-family: 'Tajawal', sans-serif; }
+
+        /* ── GLASS SYSTEM ── */
+        .glass {
+            background: rgba(22,19,14,0.55);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.07);
+            box-shadow: 0 8px 32px -8px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05);
+        }
+        html.light .glass {
+            background: rgba(255,255,255,0.55);
+            border: 1px solid rgba(255,255,255,0.75);
+            box-shadow: 0 8px 32px -8px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9);
+        }
+        .glass-strong {
+            background: rgba(28,23,16,0.8);
+            backdrop-filter: blur(40px) saturate(200%);
+            -webkit-backdrop-filter: blur(40px) saturate(200%);
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 12px 48px -12px rgba(0,0,0,0.4);
+        }
+        html.light .glass-strong {
+            background: rgba(255,255,255,0.75);
+            border: 1px solid rgba(255,255,255,0.9);
+            box-shadow: 0 12px 48px -12px rgba(0,0,0,0.1);
+        }
+        .gold-border { border: 1px solid rgba(19,92,81,0.4); box-shadow: 0 0 24px rgba(19,92,81,0.12), inset 0 1px 0 rgba(19,92,81,0.1); }
+
+        /* ── LANGUAGE / DIR ── */
+        html[lang="en"] .ar-only { display: none !important; }
+        html[lang="ar"] .en-only { display: none !important; }
+
+        /* ── SCROLLBAR ── */
+        .no-scrollbar::-webkit-scrollbar { display: none !important; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(198,141,88,0.3); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(198,141,88,0.5); }
+
+        /* ── PIN NUMPAD ── */
+        .pin-dot {
+            width: 18px; height: 18px; border-radius: 50%;
+            border: 2px solid rgba(198,141,88,0.5);
+            transition: all 0.2s ease;
+        }
+        .pin-dot.filled {
+            background: #c68d58;
+            border-color: #c68d58;
+            box-shadow: 0 0 12px rgba(198,141,88,0.4);
+        }
+        .numpad-btn {
+            width: 72px; height: 72px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; font-weight: 600;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #f0ebe3;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        html.light .numpad-btn {
+            background: rgba(0,0,0,0.04);
+            border: 1px solid rgba(0,0,0,0.1);
+            color: #1a1713;
+        }
+        .numpad-btn:hover { background: rgba(198,141,88,0.2); border-color: rgba(198,141,88,0.4); }
+        .numpad-btn:active { transform: scale(0.92); background: rgba(198,141,88,0.35); }
+
+        /* ── SHAKE ── */
+        @keyframes shake {
+            0%,100% { transform: translateX(0); }
+            10%,30%,50%,70%,90% { transform: translateX(-6px); }
+            20%,40%,60%,80% { transform: translateX(6px); }
+        }
+        .shake { animation: shake 0.5s ease; }
+
+        /* ── KANBAN ── */
+        .kanban-col {
+            min-height: 300px;
+            max-height: calc(100vh - 220px);
+            overflow-y: auto;
+        }
+
+        /* ── ORDER CARD ── */
+        @keyframes cardSlideIn {
+            from { opacity: 0; transform: translateY(-16px) scale(0.96); }
+            to { opacity: 1; transform: none; }
+        }
+        @keyframes cardSlideOut {
+            from { opacity: 1; transform: none; }
+            to { opacity: 0; transform: translateX(40px) scale(0.92); }
+        }
+        .card-enter { animation: cardSlideIn 0.35s cubic-bezier(0.4,0,0.2,1) both; }
+        .card-exit { animation: cardSlideOut 0.3s cubic-bezier(0.4,0,0.2,1) both; }
+
+        /* ── PULSE ── */
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+        .pulse { animation: pulse 1.8s ease-in-out infinite; }
+
+        /* ── TOAST ── */
+        @keyframes toastPop {
+            0%   { transform: translate(-50%,-200%) scale(0.9); opacity:0; }
+            12%  { transform: translate(-50%, 16px) scale(1.02); opacity:1; }
+            15%  { transform: translate(-50%, 12px) scale(1); opacity:1; }
+            80%  { transform: translate(-50%, 12px) scale(1); opacity:1; }
+            100% { transform: translate(-50%,-200%) scale(0.9); opacity:0; }
+        }
+        .toast-show { animation: toastPop 3.2s cubic-bezier(0.4,0,0.2,1) forwards; }
+
+        /* ── MODAL ── */
+        @keyframes modalIn { from{opacity:0;transform:scale(0.92) translateY(16px)} to{opacity:1;transform:none} }
+        .modal-enter { animation: modalIn 0.35s cubic-bezier(0.4,0,0.2,1) both; }
+        @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+        .fade-in { animation: fadeIn 0.3s ease both; }
+
+        /* ── SSE DOT ── */
+        @keyframes ssePulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.5); }
+            50% { box-shadow: 0 0 0 6px rgba(34,197,94,0); }
+        }
+        .sse-connected { background: #22c55e; animation: ssePulse 2s infinite; }
+        .sse-disconnected { background: #ef4444; }
+
+        /* ── MOBILE TAB ── */
+        .mobile-tab {
+            padding: 10px 20px;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        .mobile-tab.active {
+            background: #c68d58;
+            color: #fff;
+        }
+        .mobile-tab:not(.active) {
+            background: rgba(255,255,255,0.06);
+            color: rgba(255,255,255,0.6);
+        }
+        html.light .mobile-tab:not(.active) {
+            background: rgba(0,0,0,0.06);
+            color: rgba(0,0,0,0.5);
+        }
+
+        /* ── TIME BADGE COLORS ── */
+        .time-green { color: #22c55e; }
+        .time-yellow { color: #eab308; }
+        .time-red { color: #ef4444; }
+
+        /* ── STAT CARD ── */
+        .stat-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            padding: 12px 16px;
+        }
+        html.light .stat-card {
+            background: rgba(0,0,0,0.03);
+            border: 1px solid rgba(0,0,0,0.06);
+        }
+
+        /* ── KANBAN COLUMN BG ── */
+        .kanban-bg {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.04);
+        }
+        html.light .kanban-bg {
+            background: rgba(0,0,0,0.02);
+            border: 1px solid rgba(0,0,0,0.06);
+        }
+
+        /* ── RIPPLE ── */
+        .ripple-btn { position:relative; overflow:hidden; }
+        .ripple-btn::after { content:''; position:absolute; inset:0; background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%); transform:scale(0); opacity:0; border-radius:inherit; transition: transform 0.4s ease, opacity 0.4s ease; }
+        .ripple-btn:active::after { transform:scale(2.5); opacity:1; transition:none; }
+
+        /* ── SCREEN TRANSITIONS ── */
+        @keyframes screenFadeIn {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: none; }
+        }
+        .screen-enter { animation: screenFadeIn 0.4s cubic-bezier(0.4,0,0.2,1) both; }
+    </style>
+</head>
+<body class="min-h-screen">
+
+<!-- ══════════════════════════════════════════════════ -->
+<!--  TOAST NOTIFICATION                               -->
+<!-- ══════════════════════════════════════════════════ -->
+<div id="toast" class="fixed top-0 left-1/2 -translate-x-1/2 z-[200] pointer-events-none hidden">
+    <div class="glass-strong gold-border rounded-2xl px-6 py-3 flex items-center gap-3 shadow-2xl">
+        <span id="toastIcon" class="text-xl">☕</span>
+        <span id="toastMsg" class="text-sm font-medium"></span>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!--  CANCEL CONFIRMATION MODAL                        -->
+<!-- ══════════════════════════════════════════════════ -->
+<div id="cancelModal" class="fixed inset-0 z-[150] hidden items-center justify-center" style="background:rgba(0,0,0,0.6); backdrop-filter:blur(4px);">
+    <div class="glass-strong gold-border rounded-2xl p-6 max-w-sm w-full mx-4 modal-enter">
+        <div class="text-center mb-4">
+            <div class="w-14 h-14 rounded-full bg-red-500/10 flex items-center justify-center mx-auto mb-3">
+                <svg class="w-7 h-7 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
+            </div>
+            <h3 class="text-lg font-bold mb-1">
+                <span class="en-only">Cancel Order?</span>
+                <span class="ar-only">إلغاء الطلب؟</span>
+            </h3>
+            <p class="text-sm opacity-60" id="cancelModalOrder"></p>
+            <p class="text-sm opacity-50 mt-1">
+                <span class="en-only">This action cannot be undone.</span>
+                <span class="ar-only">لا يمكن التراجع عن هذا الإجراء.</span>
+            </p>
+        </div>
+        <div class="flex gap-3">
+            <button onclick="closeCancelModal()" class="flex-1 px-4 py-3 rounded-xl font-semibold text-sm glass hover:opacity-80 transition-opacity">
+                <span class="en-only">Keep Order</span>
+                <span class="ar-only">إبقاء الطلب</span>
+            </button>
+            <button id="confirmCancelBtn" class="flex-1 px-4 py-3 rounded-xl font-semibold text-sm bg-red-500 text-white hover:bg-red-600 transition-colors ripple-btn">
+                <span class="en-only">Cancel Order</span>
+                <span class="ar-only">إلغاء الطلب</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!--  PIN LOGIN SCREEN                                 -->
+<!-- ══════════════════════════════════════════════════ -->
+<div id="loginScreen" class="min-h-screen flex items-center justify-center p-4">
+    <div class="glass-strong gold-border rounded-3xl p-8 w-full max-w-sm text-center screen-enter">
+        <!-- Logo -->
+        <div class="mb-6">
+            <div class="w-20 h-20 border-4 border-infrontof-accent flex flex-col items-center justify-center text-xs font-black leading-none tracking-tighter p-2 rounded-md mx-auto mb-4 shadow-lg shadow-infrontof-accent/20 text-infrontof-accent bg-transparent">
+                <span class="text-[14px]">IN</span>
+                <span class="text-[14px]">FRONT</span>
+                <span class="text-[14px]">OF..</span>
+            </div>
+            <h1 class="text-2xl font-bold tracking-tight uppercase" style="font-family:'Playfair Display',serif;">
+                <span class="en-only">IN FRONT OF..</span>
+                <span class="ar-only">ان فرونت اوف</span>
+            </h1>
+            <p class="text-sm opacity-50 mt-1">
+                <span class="en-only">Barista Terminal</span>
+                <span class="ar-only">محطة الباريستا</span>
+            </p>
+        </div>
+
+        <!-- PIN Dots -->
+        <div id="pinDots" class="flex justify-center gap-4 mb-8">
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+        </div>
+
+        <!-- Error Message -->
+        <p id="pinError" class="text-red-400 text-sm mb-4 h-5"></p>
+
+        <!-- Numpad -->
+        <div class="grid grid-cols-3 gap-3 justify-items-center max-w-[260px] mx-auto">
+            <button class="numpad-btn" onclick="pinInput('1')">1</button>
+            <button class="numpad-btn" onclick="pinInput('2')">2</button>
+            <button class="numpad-btn" onclick="pinInput('3')">3</button>
+            <button class="numpad-btn" onclick="pinInput('4')">4</button>
+            <button class="numpad-btn" onclick="pinInput('5')">5</button>
+            <button class="numpad-btn" onclick="pinInput('6')">6</button>
+            <button class="numpad-btn" onclick="pinInput('7')">7</button>
+            <button class="numpad-btn" onclick="pinInput('8')">8</button>
+            <button class="numpad-btn" onclick="pinInput('9')">9</button>
+            <button class="numpad-btn text-lg opacity-50" onclick="pinClear()">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+            </button>
+            <button class="numpad-btn" onclick="pinInput('0')">0</button>
+            <button class="numpad-btn text-lg" onclick="pinBackspace()">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414-6.414A2 2 0 0110.828 5H19a2 2 0 012 2v10a2 2 0 01-2 2h-8.172a2 2 0 01-1.414-.586L3 12z"/></svg>
+            </button>
+        </div>
+
+        <!-- Language & Theme toggles on login -->
+        <div class="flex justify-center gap-4 mt-8">
+            <button onclick="toggleTheme()" class="text-xs opacity-40 hover:opacity-70 transition-opacity flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                <span class="en-only">Theme</span><span class="ar-only">المظهر</span>
+            </button>
+            <button onclick="toggleLang()" class="text-xs opacity-40 hover:opacity-70 transition-opacity flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/></svg>
+                <span class="en-only">عربي</span><span class="ar-only">English</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!--  DASHBOARD SCREEN                                 -->
+<!-- ══════════════════════════════════════════════════ -->
+<div id="dashboardScreen" class="hidden min-h-screen flex flex-col">
+
+    <!-- ── TOP BAR ── -->
+    <nav class="glass-strong sticky top-0 z-50 border-b border-white/5">
+        <div class="max-w-[1600px] mx-auto px-4 py-3 flex items-center justify-between gap-4">
+            <!-- Left: Logo + Title -->
+            <div class="flex items-center gap-3 min-w-0">
+                <div class="w-8 h-8 border border-current flex flex-col items-center justify-center text-[6px] font-black leading-none tracking-tighter p-0.5 rounded-sm flex-shrink-0 text-infrontof-accent">
+                    <span>IN</span>
+                    <span>FRONT</span>
+                    <span>OF..</span>
+                </div>
+                <div class="min-w-0">
+                    <h1 class="text-sm font-bold tracking-tight truncate">
+                        <span class="en-only">IN FRONT OF Terminal</span>
+                        <span class="ar-only">محطة ان فرونت اوف</span>
+                    </h1>
+                    <div class="flex items-center gap-1.5">
+                        <div id="sseDot" class="w-2 h-2 rounded-full sse-disconnected flex-shrink-0"></div>
+                        <span id="sseLabel" class="text-[10px] opacity-40">
+                            <span class="en-only">Connecting...</span>
+                            <span class="ar-only">جاري الاتصال...</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Center: Stats (hidden on mobile) -->
+            <div id="statsBar" class="hidden md:flex items-center gap-3">
+                <div class="stat-card flex items-center gap-2">
+                    <svg class="w-4 h-4 text-infrontof-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                    <div>
+                        <div class="text-[10px] opacity-40 leading-none">
+                            <span class="en-only">Orders</span><span class="ar-only">الطلبات</span>
+                        </div>
+                        <div id="statOrders" class="text-sm font-bold leading-tight text-infrontof-accent">—</div>
+                    </div>
+                </div>
+                <div class="stat-card flex items-center gap-2">
+                    <svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <div>
+                        <div class="text-[10px] opacity-40 leading-none">
+                            <span class="en-only">Revenue</span><span class="ar-only">الإيرادات</span>
+                        </div>
+                        <div id="statRevenue" class="text-sm font-bold leading-tight text-green-500">—</div>
+                    </div>
+                </div>
+                <div class="stat-card flex items-center gap-2">
+                    <svg class="w-4 h-4 text-blue-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <div>
+                        <div class="text-[10px] opacity-40 leading-none">
+                            <span class="en-only">Avg Prep</span><span class="ar-only">متوسط التحضير</span>
+                        </div>
+                        <div id="statAvgPrep" class="text-sm font-bold leading-tight text-blue-400">—</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Controls -->
+            <div class="flex items-center gap-2 flex-shrink-0">
+                <button onclick="openHistoryModal()" class="w-9 h-9 rounded-lg flex items-center justify-center opacity-50 hover:opacity-100 hover:bg-white/5 transition-all text-sm" title="Order History">
+                    📋
+                </button>
+                <button onclick="toggleTheme()" class="w-9 h-9 rounded-lg flex items-center justify-center opacity-50 hover:opacity-100 hover:bg-white/5 transition-all" title="Toggle theme">
+                    <svg id="themeIconDash" class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                </button>
+                <button onclick="toggleLang()" class="w-9 h-9 rounded-lg flex items-center justify-center opacity-50 hover:opacity-100 hover:bg-white/5 transition-all text-xs font-bold" title="Toggle language">
+                    <span class="en-only">ع</span><span class="ar-only">EN</span>
+                </button>
+                <button onclick="logout()" class="w-9 h-9 rounded-lg flex items-center justify-center opacity-50 hover:opacity-100 hover:bg-white/5 transition-all text-red-400" title="Logout">
+                    <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Stats Row -->
+        <div class="md:hidden px-4 pb-3 flex gap-2 overflow-x-auto no-scrollbar">
+            <div class="stat-card flex items-center gap-2 flex-shrink-0">
+                <span class="text-infrontof-accent text-xs">📋</span>
+                <span id="statOrdersMobile" class="text-xs font-bold text-infrontof-accent">—</span>
+            </div>
+            <div class="stat-card flex items-center gap-2 flex-shrink-0">
+                <span class="text-green-500 text-xs">💰</span>
+                <span id="statRevenueMobile" class="text-xs font-bold text-green-500">—</span>
+            </div>
+            <div class="stat-card flex items-center gap-2 flex-shrink-0">
+                <span class="text-blue-400 text-xs">⏱️</span>
+                <span id="statAvgPrepMobile" class="text-xs font-bold text-blue-400">—</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ── MOBILE TABS (visible on small screens) ── -->
+    <div class="md:hidden px-4 pt-3 flex gap-2 overflow-x-auto no-scrollbar">
+        <button class="mobile-tab active" data-tab="pending" onclick="switchMobileTab('pending')">
+            <span class="en-only">Pending</span><span class="ar-only">قيد الانتظار</span>
+            <span id="mobileBadgePending" class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-white/20 text-[10px] font-bold ms-1">0</span>
+        </button>
+        <button class="mobile-tab" data-tab="preparing" onclick="switchMobileTab('preparing')">
+            <span class="en-only">Preparing</span><span class="ar-only">قيد التحضير</span>
+            <span id="mobileBadgePreparing" class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-white/20 text-[10px] font-bold ms-1">0</span>
+        </button>
+        <button class="mobile-tab" data-tab="ready" onclick="switchMobileTab('ready')">
+            <span class="en-only">Ready</span><span class="ar-only">جاهز</span>
+            <span id="mobileBadgeReady" class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-white/20 text-[10px] font-bold ms-1">0</span>
+        </button>
+    </div>
+
+    <!-- ── KANBAN BOARD ── -->
+    <div class="flex-1 p-4 max-w-[1600px] mx-auto w-full">
+        <div id="kanbanDesktop" class="hidden md:grid md:grid-cols-3 gap-4 h-full">
+            <!-- Pending Column -->
+            <div class="flex flex-col">
+                <div class="flex items-center justify-between mb-3 px-1">
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 rounded-full bg-amber-500"></div>
+                        <h2 class="font-bold text-sm">
+                            <span class="en-only">Pending</span><span class="ar-only">قيد الانتظار</span>
+                        </h2>
+                    </div>
+                    <span id="badgePending" class="px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-500 text-xs font-bold">0</span>
+                </div>
+                <div id="colPending" class="kanban-col kanban-bg flex flex-col gap-3 flex-1 rounded-2xl p-3">
+                </div>
+            </div>
+
+            <!-- Preparing Column -->
+            <div class="flex flex-col">
+                <div class="flex items-center justify-between mb-3 px-1">
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 rounded-full bg-blue-500"></div>
+                        <h2 class="font-bold text-sm">
+                            <span class="en-only">Preparing</span><span class="ar-only">قيد التحضير</span>
+                        </h2>
+                    </div>
+                    <span id="badgePreparing" class="px-2.5 py-0.5 rounded-full bg-blue-500/15 text-blue-500 text-xs font-bold">0</span>
+                </div>
+                <div id="colPreparing" class="kanban-col kanban-bg flex flex-col gap-3 flex-1 rounded-2xl p-3">
+                </div>
+            </div>
+
+            <!-- Ready Column -->
+            <div class="flex flex-col">
+                <div class="flex items-center justify-between mb-3 px-1">
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        <h2 class="font-bold text-sm">
+                            <span class="en-only">Ready</span><span class="ar-only">جاهز</span>
+                        </h2>
+                    </div>
+                    <span id="badgeReady" class="px-2.5 py-0.5 rounded-full bg-green-500/15 text-green-500 text-xs font-bold">0</span>
+                </div>
+                <div id="colReady" class="kanban-col kanban-bg flex flex-col gap-3 flex-1 rounded-2xl p-3">
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile single column view -->
+        <div id="kanbanMobile" class="md:hidden mt-3">
+            <div id="mobileColPending" class="flex flex-col gap-3"></div>
+            <div id="mobileColPreparing" class="hidden flex-col gap-3"></div>
+            <div id="mobileColReady" class="hidden flex-col gap-3"></div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════ -->
+<!--  JAVASCRIPT                                       -->
+<!-- ══════════════════════════════════════════════════ -->
+<script>
+(function() {
+    'use strict';
+
+    // ══════════════════════════════════════
+    //  STATE
+    // ══════════════════════════════════════
+    let pin = '';
+    let token = localStorage.getItem('infrontof_barista_token') || '';
+    let orders = [];
+    let currentMobileTab = 'pending';
+    let sseSource = null;
+    let sseReconnectTimer = null;
+    let pollTimer = null;
+    let statsTimer = null;
+    let timeUpdateTimer = null;
+    let cancelTargetId = null;
+    let audioCtx = null;
+
+    const lang = () => document.documentElement.lang;
+    const isAr = () => lang() === 'ar';
+
+    // ══════════════════════════════════════
+    //  TOAST
+    // ══════════════════════════════════════
+    function showToast(msg, icon = '☕') {
+        const el = document.getElementById('toast');
+        document.getElementById('toastMsg').textContent = msg;
+        document.getElementById('toastIcon').textContent = icon;
+        el.classList.remove('hidden');
+        el.querySelector('div').classList.remove('toast-show');
+        void el.querySelector('div').offsetWidth;
+        el.querySelector('div').classList.add('toast-show');
+        setTimeout(() => { el.classList.add('hidden'); }, 3400);
+    }
+
+    // ══════════════════════════════════════
+    //  THEME & LANGUAGE
+    // ══════════════════════════════════════
+    window.toggleTheme = function() {
+        const html = document.documentElement;
+        const isDark = html.classList.contains('dark');
+        html.classList.toggle('dark', !isDark);
+        html.classList.toggle('light', isDark);
+        localStorage.setItem('infrontof_barista_theme', isDark ? 'light' : 'dark');
+    };
+
+    window.toggleLang = function() {
+        const html = document.documentElement;
+        const newLang = html.lang === 'en' ? 'ar' : 'en';
+        html.lang = newLang;
+        html.dir = newLang === 'ar' ? 'rtl' : 'ltr';
+        localStorage.setItem('infrontof_barista_lang', newLang);
+        renderAllColumns();
+    };
+
+    // Restore saved preferences
+    (function restorePrefs() {
+        const savedTheme = localStorage.getItem('infrontof_barista_theme');
+        if (savedTheme === 'light') {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.classList.add('light');
+        }
+        const savedLang = localStorage.getItem('infrontof_barista_lang');
+        if (savedLang === 'ar') {
+            document.documentElement.lang = 'ar';
+            document.documentElement.dir = 'rtl';
+        }
+    })();
+
+    // ══════════════════════════════════════
+    //  PIN LOGIN
+    // ══════════════════════════════════════
+    function updatePinDots() {
+        const dots = document.querySelectorAll('#pinDots .pin-dot');
+        dots.forEach((d, i) => {
+            d.classList.toggle('filled', i < pin.length);
+        });
+    }
+
+    window.pinInput = function(digit) {
+        if (pin.length >= 4) return;
+        pin += digit;
+        updatePinDots();
+        document.getElementById('pinError').textContent = '';
+        if (pin.length === 4) {
+            attemptLogin();
+        }
+    };
+
+    window.pinClear = function() {
+        pin = '';
+        updatePinDots();
+        document.getElementById('pinError').textContent = '';
+    };
+
+    window.pinBackspace = function() {
+        pin = pin.slice(0, -1);
+        updatePinDots();
+        document.getElementById('pinError').textContent = '';
+    };
+
+    async function attemptLogin() {
+        try {
+            const res = await fetch('/api/barista/auth', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ pin })
+            });
+            const data = await res.json();
+            if (data.success) {
+                token = data.token;
+                localStorage.setItem('infrontof_barista_token', token);
+                showDashboard();
+            } else {
+                shakePin();
+                document.getElementById('pinError').textContent = isAr() ? 'رمز PIN غير صحيح' : 'Incorrect PIN';
+                pin = '';
+                setTimeout(updatePinDots, 500);
+            }
+        } catch (err) {
+            shakePin();
+            document.getElementById('pinError').textContent = isAr() ? 'خطأ في الاتصال' : 'Connection error';
+            pin = '';
+            setTimeout(updatePinDots, 500);
+        }
+    }
+
+    function shakePin() {
+        const el = document.getElementById('pinDots');
+        el.classList.add('shake');
+        setTimeout(() => el.classList.remove('shake'), 600);
+    }
+
+    // ══════════════════════════════════════
+    //  DASHBOARD INIT
+    // ══════════════════════════════════════
+    function showDashboard() {
+        document.getElementById('loginScreen').classList.add('hidden');
+        const dash = document.getElementById('dashboardScreen');
+        dash.classList.remove('hidden');
+        dash.classList.add('screen-enter');
+        loadOrders();
+        loadStats();
+        connectSSE();
+        startPolling();
+        startStatsRefresh();
+        startTimeUpdater();
+    }
+
+    window.logout = function() {
+        token = '';
+        localStorage.removeItem('infrontof_barista_token');
+        orders = [];
+        if (sseSource) { sseSource.close(); sseSource = null; }
+        clearTimeout(sseReconnectTimer);
+        clearInterval(pollTimer);
+        clearInterval(statsTimer);
+        clearInterval(timeUpdateTimer);
+        document.getElementById('dashboardScreen').classList.add('hidden');
+        document.getElementById('loginScreen').classList.remove('hidden');
+        pin = '';
+        updatePinDots();
+    };
+
+    // Auto-login if token exists (try to load orders to validate)
+    if (token) {
+        showDashboard();
+    }
+
+    // ══════════════════════════════════════
+    //  LOAD ORDERS
+    // ══════════════════════════════════════
+    async function loadOrders() {
+        try {
+            const res = await fetch('/api/barista/orders', {
+                headers: { 'Authorization': 'Bearer ' + localStorage.getItem('infrontof_barista_token') }
+            });
+            
+        if (res.status === 401 || res.status === 403) {
+            localStorage.removeItem('infrontof_barista_token');
+            document.getElementById('dashboardScreen').classList.add('hidden');
+            document.getElementById('loginScreen').classList.remove('hidden');
+            return;
+        }
+
+            const data = await res.json();
+            if (data.success) {
+                orders = data.orders;
+                renderAllColumns();
+            }
+        } catch (err) {
+            console.error('Failed to load orders:', err);
+        }
+    }
+
+    // ══════════════════════════════════════
+    //  LOAD STATS
+    // ══════════════════════════════════════
+    async function loadStats() {
+        try {
+            const res = await fetch('/api/barista/stats', {
+                headers: { 'Authorization': 'Bearer ' + localStorage.getItem('infrontof_barista_token') }
+            });
+            
+        if (res.status === 401 || res.status === 403) {
+            localStorage.removeItem('infrontof_barista_token');
+            document.getElementById('dashboardScreen').classList.add('hidden');
+            document.getElementById('loginScreen').classList.remove('hidden');
+            return;
+        }
+
+            const data = await res.json();
+            if (data.success) {
+                const s = data.stats;
+                document.getElementById('statOrders').textContent = s.total_orders;
+                document.getElementById('statOrdersMobile').textContent = s.total_orders;
+                document.getElementById('statRevenue').textContent = s.revenue + ' SAR';
+                document.getElementById('statRevenueMobile').textContent = s.revenue + ' SAR';
+                const prep = s.avg_prep_minutes ? s.avg_prep_minutes + (isAr() ? ' د' : ' min') : '—';
+                document.getElementById('statAvgPrep').textContent = prep;
+                document.getElementById('statAvgPrepMobile').textContent = prep;
+            }
+        } catch (err) {
+            console.error('Failed to load stats:', err);
+        }
+    }
+
+    function startStatsRefresh() {
+        statsTimer = setInterval(loadStats, 60000);
+    }
+
+    // ══════════════════════════════════════
+    //  SSE (Server-Sent Events)
+    // ══════════════════════════════════════
+    function connectSSE() {
+        if (sseSource) { sseSource.close(); }
+        clearTimeout(sseReconnectTimer);
+
+        sseSource = new EventSource('/api/sse/barista?token=' + encodeURIComponent(localStorage.getItem('infrontof_barista_token')));
+
+        sseSource.onopen = () => {
+            updateSSEStatus(true);
+        };
+
+        sseSource.addEventListener('new_order', (e) => {
+            try {
+                const order = JSON.parse(e.data);
+                // Parse items if items_json present
+                if (order.items_json && !order.items) {
+                    order.items = JSON.parse(order.items_json);
+                }
+                // Check if we already have it
+                const existing = orders.find(o => o.id === order.id);
+                if (!existing) {
+                    orders.push(order);
+                    renderAllColumns();
+                    playChime();
+                    showToast(
+                        isAr()
+                            ? `طلب جديد: ${order.order_number}`
+                            : `New order: ${order.order_number}`,
+                        '🔔'
+                    );
+                    loadStats();
+                }
+            } catch (err) { console.error('SSE new_order parse error:', err); }
+        });
+
+        sseSource.addEventListener('order_update', (e) => {
+            try {
+                const updated = JSON.parse(e.data);
+                if (updated.items_json && !updated.items) {
+                    updated.items = JSON.parse(updated.items_json);
+                }
+                const idx = orders.findIndex(o => o.id === updated.id);
+                if (updated.status === 'completed' || updated.status === 'cancelled') {
+                    // Animate out then remove
+                    if (idx !== -1) {
+                        animateCardOut(updated.id, () => {
+                            orders = orders.filter(o => o.id !== updated.id);
+                            renderAllColumns();
+                        });
+                    }
+                } else if (idx !== -1) {
+                    orders[idx] = updated;
+                    renderAllColumns();
+                } else {
+                    orders.push(updated);
+                    renderAllColumns();
+                }
+                loadStats();
+            } catch (err) { console.error('SSE order_update parse error:', err); }
+        });
+
+        sseSource.onerror = () => {
+            updateSSEStatus(false);
+            sseSource.close();
+            sseSource = null;
+            // Auto-reconnect after 5 seconds
+            sseReconnectTimer = setTimeout(connectSSE, 5000);
+        };
+    }
+
+    function updateSSEStatus(connected) {
+        const dot = document.getElementById('sseDot');
+        const label = document.getElementById('sseLabel');
+        dot.className = 'w-2 h-2 rounded-full flex-shrink-0 ' + (connected ? 'sse-connected' : 'sse-disconnected');
+        label.innerHTML = connected
+            ? `<span class="en-only">Live</span><span class="ar-only">مباشر</span>`
+            : `<span class="en-only">Reconnecting...</span><span class="ar-only">إعادة الاتصال...</span>`;
+    }
+
+    // ══════════════════════════════════════
+    //  POLLING FALLBACK
+    // ══════════════════════════════════════
+    function startPolling() {
+        pollTimer = setInterval(async () => {
+            if (sseSource && sseSource.readyState === EventSource.OPEN) return;
+            await loadOrders();
+        }, 8000);
+    }
+
+    // ══════════════════════════════════════
+    //  SOUND (Web Audio API chime)
+    // ══════════════════════════════════════
+    function playChime() {
+        try {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const now = audioCtx.currentTime;
+
+            // Two-tone chime: C5 then E5
+            const notes = [523.25, 659.25];
+            notes.forEach((freq, i) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, now + i * 0.15);
+                gain.gain.setValueAtTime(0, now + i * 0.15);
+                gain.gain.linearRampToValueAtTime(0.3, now + i * 0.15 + 0.02);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.15 + 0.5);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now + i * 0.15);
+                osc.stop(now + i * 0.15 + 0.5);
+            });
+        } catch (err) { /* Audio not available */ }
+    }
+
+    // ══════════════════════════════════════
+    //  TIME HELPERS
+    // ══════════════════════════════════════
+    function timeAgo(dateStr) {
+        const now = new Date();
+        const created = new Date(dateStr + 'Z'); // Treat as UTC from SQLite
+        const diffMs = now - created;
+        const diffMin = Math.floor(diffMs / 60000);
+        const diffHr = Math.floor(diffMin / 60);
+
+        if (isAr()) {
+            if (diffMin < 1) return 'الآن';
+            if (diffMin < 60) return `${diffMin} د`;
+            return `${diffHr} س ${diffMin % 60} د`;
+        } else {
+            if (diffMin < 1) return 'Just now';
+            if (diffMin < 60) return `${diffMin} min ago`;
+            return `${diffHr}h ${diffMin % 60}m ago`;
+        }
+    }
+
+    function timeColorClass(dateStr) {
+        const now = new Date();
+        const created = new Date(dateStr + 'Z');
+        const diffMin = Math.floor((now - created) / 60000);
+        if (diffMin < 5) return 'time-green';
+        if (diffMin < 10) return 'time-yellow';
+        return 'time-red';
+    }
+
+    function startTimeUpdater() {
+        timeUpdateTimer = setInterval(() => {
+            document.querySelectorAll('[data-created-at]').forEach(el => {
+                const created = el.dataset.createdAt;
+                el.textContent = timeAgo(created);
+                el.className = el.className.replace(/time-\w+/g, '') + ' ' + timeColorClass(created);
+            });
+        }, 15000);
+    }
+
+    // ══════════════════════════════════════
+    //  RENDER
+    // ══════════════════════════════════════
+    function getOrdersByStatus(status) {
+        return orders.filter(o => o.status === status);
+    }
+
+    function renderOrderCard(order, animate = false) {
+        const items = order.items || [];
+        const ar = isAr();
+        const timeTxt = timeAgo(order.created_at);
+        const timeClass = timeColorClass(order.created_at);
+        const hasNotes = order.notes && order.notes.trim().length > 0;
+
+        let actionsHtml = '';
+        if (order.status === 'pending') {
+            actionsHtml = `
+                <div class="flex gap-2 mt-3">
+                    <button onclick="updateOrderStatus(${order.id}, 'preparing')"
+                        class="flex-1 py-2.5 rounded-xl text-xs font-bold bg-green-500 text-white hover:bg-green-600 transition-colors ripple-btn">
+                        ${ar ? 'بدء التحضير' : 'Start Preparing'}
+                    </button>
+                    <button onclick="showCancelModal(${order.id}, '${order.order_number}')"
+                        class="py-2.5 px-3 rounded-xl text-xs font-bold border border-red-500/30 text-red-400 hover:bg-red-500/10 transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>`;
+        } else if (order.status === 'preparing') {
+            actionsHtml = `
+                <div class="mt-3">
+                    <button onclick="updateOrderStatus(${order.id}, 'ready')"
+                        class="w-full py-2.5 rounded-xl text-xs font-bold bg-blue-500 text-white hover:bg-blue-600 transition-colors ripple-btn">
+                        ${ar ? 'جاهز للاستلام' : 'Mark Ready'}
+                    </button>
+                </div>`;
+        } else if (order.status === 'ready') {
+            actionsHtml = `
+                <div class="mt-3">
+                    <button onclick="updateOrderStatus(${order.id}, 'completed')"
+                        class="w-full py-2.5 rounded-xl text-xs font-bold bg-infrontof-accent text-white hover:opacity-90 transition-opacity ripple-btn">
+                        ${ar ? 'تم الاستلام' : 'Complete'}
+                    </button>
+                </div>`;
+        }
+
+        const itemsHtml = items.map(item => `
+            <div class="flex justify-between items-center text-xs">
+                <span class="opacity-80">${item.qty}× ${ar ? (item.name_ar || item.name_en) : item.name_en}</span>
+                <span class="opacity-40 font-mono">${item.price} SAR</span>
+            </div>
+        `).join('');
+
+        const notesHtml = hasNotes ? `
+            <div class="mt-2 px-2.5 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20">
+                <p class="text-[11px] text-amber-400 flex items-start gap-1">
+                    <svg class="w-3 h-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/></svg>
+                    <span>${order.notes}</span>
+                </p>
+            </div>` : '';
+
+        let delayHtml = '';
+        if (['pending', 'preparing', 'ready'].includes(order.status)) {
+            delayHtml = `
+            <div class="flex items-center justify-between border-t border-white/5 pt-2 mt-2">
+                <button onclick="promptDelayUpdate(${order.id})" class="text-[10px] font-bold text-infrontof-accent opacity-70 hover:opacity-100 transition flex items-center gap-1 select-none">
+                    💬 ${ar ? 'إرسال تحديث' : 'Send Update'}
+                </button>
+                ${order.barista_note ? `
+                    <span class="text-[9px] opacity-60 bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 px-2 py-0.5 rounded-full truncate max-w-[120px]" title="${order.barista_note}">
+                        ${order.barista_note}
+                    </span>
+                ` : ''}
+            </div>`;
+        }
+
+        const customerHtml = order.customer_name ? `
+            <div class="text-[11px] opacity-40 mt-1 flex items-center gap-1">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                ${order.customer_name}${order.customer_phone ? ' · ' + order.customer_phone : ''}
+            </div>` : '';
+
+        return `
+        <div class="glass rounded-2xl p-4 ${animate ? 'card-enter' : ''}" id="card-${order.id}" data-order-id="${order.id}">
+            <!-- Header -->
+            <div class="flex items-start justify-between mb-2">
+                <div>
+                    <span class="text-base font-bold tracking-tight text-infrontof-accent">${order.order_number}</span>
+                    ${customerHtml}
+                </div>
+                <div class="text-right flex flex-col items-end gap-1">
+                    <span class="text-[11px] font-semibold ${timeClass}" data-created-at="${order.created_at}">${timeTxt}</span>
+                    <span class="text-[10px] opacity-30 font-mono">${order.total} SAR</span>
+                </div>
+            </div>
+
+            <!-- Items -->
+            <div class="space-y-1 border-t border-white/5 pt-2">
+                ${itemsHtml}
+            </div>
+
+            ${notesHtml}
+            ${delayHtml}
+            ${actionsHtml}
+        </div>`;
+    }
+
+    function renderEmptyState(status) {
+        const ar = isAr();
+        const msgs = {
+            pending: { en: 'No pending orders', ar: 'لا توجد طلبات قيد الانتظار', icon: '📭' },
+            preparing: { en: 'Nothing being prepared', ar: 'لا يوجد شيء قيد التحضير', icon: '☕' },
+            ready: { en: 'No ready orders', ar: 'لا توجد طلبات جاهزة', icon: '✨' }
+        };
+        const m = msgs[status];
+        return `
+        <div class="flex flex-col items-center justify-center py-12 opacity-30">
+            <span class="text-3xl mb-2">${m.icon}</span>
+            <p class="text-sm">${ar ? m.ar : m.en}</p>
+        </div>`;
+    }
+
+    function renderColumn(containerId, status) {
+        const container = document.getElementById(containerId);
+        const statusOrders = getOrdersByStatus(status);
+
+        if (statusOrders.length === 0) {
+            container.innerHTML = renderEmptyState(status);
+        } else {
+            // Check which cards are new (not already in DOM)
+            const existingIds = new Set();
+            container.querySelectorAll('[data-order-id]').forEach(el => {
+                existingIds.add(parseInt(el.dataset.orderId));
+            });
+
+            container.innerHTML = statusOrders.map(order => {
+                const isNew = !existingIds.has(order.id);
+                return renderOrderCard(order, isNew);
+            }).join('');
+        }
+    }
+
+    function renderAllColumns() {
+        // Desktop columns
+        renderColumn('colPending', 'pending');
+        renderColumn('colPreparing', 'preparing');
+        renderColumn('colReady', 'ready');
+
+        // Mobile columns
+        renderColumn('mobileColPending', 'pending');
+        renderColumn('mobileColPreparing', 'preparing');
+        renderColumn('mobileColReady', 'ready');
+
+        // Update badges
+        const counts = {
+            pending: getOrdersByStatus('pending').length,
+            preparing: getOrdersByStatus('preparing').length,
+            ready: getOrdersByStatus('ready').length
+        };
+
+        document.getElementById('badgePending').textContent = counts.pending;
+        document.getElementById('badgePreparing').textContent = counts.preparing;
+        document.getElementById('badgeReady').textContent = counts.ready;
+        document.getElementById('mobileBadgePending').textContent = counts.pending;
+        document.getElementById('mobileBadgePreparing').textContent = counts.preparing;
+        document.getElementById('mobileBadgeReady').textContent = counts.ready;
+    }
+
+    // ══════════════════════════════════════
+    //  CARD ANIMATIONS
+    // ══════════════════════════════════════
+    function animateCardOut(orderId, callback) {
+        const card = document.getElementById('card-' + orderId);
+        if (card) {
+            card.classList.add('card-exit');
+            setTimeout(() => { callback(); }, 320);
+        } else {
+            callback();
+        }
+    }
+
+    // ══════════════════════════════════════
+    //  ORDER STATUS UPDATES
+    // ══════════════════════════════════════
+    window.promptDelayUpdate = async function(id) {
+        const ar = isAr();
+        const note = prompt(
+            ar ? 'أدخل تفاصيل التحديث (مثال: تأخير ٥ دقائق، أو مادة غير متوفرة):' : 'Enter update details (e.g., "5 mins delay", or "running low on chocolate sauce"):'
+        );
+        if (note === null) return;
+
+        try {
+            const res = await fetch(`/api/barista/orders/${id}/note`, {
+                method: 'PUT',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('infrontof_barista_token')
+                },
+                body: JSON.stringify({ note: note.trim() })
+            });
+            
+        if (res.status === 401 || res.status === 403) {
+            localStorage.removeItem('infrontof_barista_token');
+            document.getElementById('dashboardScreen').classList.add('hidden');
+            document.getElementById('loginScreen').classList.remove('hidden');
+            return;
+        }
+
+            const data = await res.json();
+            if (data.success) {
+                const updated = data.order;
+                if (updated.items_json && !updated.items) {
+                    updated.items = JSON.parse(updated.items_json);
+                }
+                const idx = orders.findIndex(o => o.id === id);
+                if (idx !== -1) orders[idx] = updated;
+                renderAllColumns();
+                showToast(ar ? 'تم إرسال التحديث بنجاح' : 'Update sent successfully!', '✅');
+            } else {
+                showToast(data.error || (ar ? 'فشل إرسال التحديث' : 'Failed to send update'), '⚠️');
+            }
+        } catch {
+            showToast(ar ? 'خطأ في الاتصال' : 'Connection error', '❌');
+        }
+    };
+
+    window.openHistoryModal = async function() {
+        const ar = isAr();
+        const modal = document.getElementById('historyModal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        
+        const tbody = document.getElementById('historyTableBody');
+        tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center opacity-50">${ar ? 'جاري التحميل...' : 'Loading history...'}</td></tr>`;
+        
+        try {
+            const res = await fetch('/api/barista/orders/history', {
+                headers: { 'Authorization': 'Bearer ' + localStorage.getItem('infrontof_barista_token') }
+            });
+            
+        if (res.status === 401 || res.status === 403) {
+            localStorage.removeItem('infrontof_barista_token');
+            document.getElementById('dashboardScreen').classList.add('hidden');
+            document.getElementById('loginScreen').classList.remove('hidden');
+            return;
+        }
+
+            const data = await res.json();
+            if (data.success && data.orders.length > 0) {
+                tbody.innerHTML = data.orders.map(o => {
+                    const dateStr = new Date(o.created_at.replace(' ', 'T') + 'Z').toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    const items = o.items.map(i => `${i.qty}× ${ar ? (i.name_ar || i.name_en) : i.name_en}`).join(', ');
+                    
+                    let statusBadge = '';
+                    if (o.status === 'completed') {
+                        statusBadge = `<span class="bg-green-500/10 text-green-400 border border-green-500/20 px-2 py-0.5 rounded-full uppercase tracking-wider text-[9px] font-black">${ar ? 'مكتمل' : 'Completed'}</span>`;
+                    } else if (o.status === 'cancelled') {
+                        statusBadge = `<span class="bg-red-500/10 text-red-400 border border-red-500/20 px-2 py-0.5 rounded-full uppercase tracking-wider text-[9px] font-black">${ar ? 'ملغي' : 'Cancelled'}</span>`;
+                    } else {
+                        statusBadge = `<span class="bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-0.5 rounded-full uppercase tracking-wider text-[9px] font-black">${o.status}</span>`;
+                    }
+                    
+                    return `
+                        <tr class="hover:bg-white/[0.02] transition-colors">
+                            <td class="py-3 px-2 font-bold text-infrontof-accent">${o.order_number}</td>
+                            <td class="py-3 px-2 opacity-60">${dateStr}</td>
+                            <td class="py-3 px-2">
+                                <div class="font-semibold">${o.customer_name || '-'}</div>
+                                <div class="text-[10px] opacity-40">${o.customer_phone || ''}</div>
+                            </td>
+                            <td class="py-3 px-2 opacity-80 max-w-[200px] truncate" title="${items}">${items}</td>
+                            <td class="py-3 px-2 font-mono font-bold">${o.total} SAR</td>
+                            <td class="py-3 px-2">${statusBadge}</td>
+                            <td class="py-3 px-2 opacity-60 italic text-[11px]">${o.barista_note || '-'}</td>
+                        </tr>
+                    `;
+                }).join('');
+            } else {
+                tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center opacity-50">${ar ? 'لا توجد طلبات سابقة' : 'No orders found.'}</td></tr>`;
+            }
+        } catch {
+            tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-red-400">${ar ? 'خطأ في تحميل السجل' : 'Failed to load history.'}</td></tr>`;
+        }
+    };
+
+    window.closeHistoryModal = function() {
+        const modal = document.getElementById('historyModal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    };
+
+    window.updateOrderStatus = async function(id, newStatus) {
+        try {
+            const res = await fetch(`/api/barista/orders/${id}/status`, {
+                method: 'PUT',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('infrontof_barista_token')
+                },
+                body: JSON.stringify({ status: newStatus })
+            });
+            
+        if (res.status === 401 || res.status === 403) {
+            localStorage.removeItem('infrontof_barista_token');
+            document.getElementById('dashboardScreen').classList.add('hidden');
+            document.getElementById('loginScreen').classList.remove('hidden');
+            return;
+        }
+
+            const data = await res.json();
+            if (data.success) {
+                const updated = data.order;
+                if (updated.items_json && !updated.items) {
+                    updated.items = JSON.parse(updated.items_json);
+                }
+
+                if (newStatus === 'completed' || newStatus === 'cancelled') {
+                    animateCardOut(id, () => {
+                        orders = orders.filter(o => o.id !== id);
+                        renderAllColumns();
+                    });
+                } else {
+                    animateCardOut(id, () => {
+                        const idx = orders.findIndex(o => o.id === id);
+                        if (idx !== -1) orders[idx] = updated;
+                        renderAllColumns();
+                    });
+                }
+
+                loadStats();
+
+                const statusLabels = {
+                    preparing: isAr() ? 'قيد التحضير' : 'Preparing',
+                    ready: isAr() ? 'جاهز' : 'Ready',
+                    completed: isAr() ? 'مكتمل' : 'Completed',
+                    cancelled: isAr() ? 'ملغي' : 'Cancelled'
+                };
+                showToast(`${updated.order_number} → ${statusLabels[newStatus]}`, '✅');
+            }
+        } catch (err) {
+            showToast(isAr() ? 'خطأ في التحديث' : 'Update failed', '❌');
+        }
+    };
+
+    // ══════════════════════════════════════
+    //  CANCEL MODAL
+    // ══════════════════════════════════════
+    window.showCancelModal = function(id, orderNumber) {
+        cancelTargetId = id;
+        document.getElementById('cancelModalOrder').textContent = orderNumber;
+        document.getElementById('cancelModal').classList.remove('hidden');
+        document.getElementById('cancelModal').classList.add('flex');
+    };
+
+    window.closeCancelModal = function() {
+        document.getElementById('cancelModal').classList.add('hidden');
+        document.getElementById('cancelModal').classList.remove('flex');
+        cancelTargetId = null;
+    };
+
+    document.getElementById('confirmCancelBtn').addEventListener('click', () => {
+        if (cancelTargetId) {
+            updateOrderStatus(cancelTargetId, 'cancelled');
+            closeCancelModal();
+        }
+    });
+
+    // Close modal on backdrop click
+    document.getElementById('cancelModal').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('cancelModal')) {
+            closeCancelModal();
+        }
+    });
+
+    // ══════════════════════════════════════
+    //  MOBILE TABS
+    // ══════════════════════════════════════
+    window.switchMobileTab = function(tab) {
+        currentMobileTab = tab;
+        // Update tab buttons
+        document.querySelectorAll('.mobile-tab').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.tab === tab);
+        });
+        // Show/hide columns
+        ['pending', 'preparing', 'ready'].forEach(status => {
+            const col = document.getElementById('mobileCol' + status.charAt(0).toUpperCase() + status.slice(1));
+            if (status === tab) {
+                col.classList.remove('hidden');
+                col.classList.add('flex');
+            } else {
+                col.classList.add('hidden');
+                col.classList.remove('flex');
+            }
+        });
+    };
+
+    // ══════════════════════════════════════
+    //  KEYBOARD SUPPORT (for login)
+    // ══════════════════════════════════════
+    document.addEventListener('keydown', (e) => {
+        // Only handle if login screen is visible
+        if (!document.getElementById('loginScreen').classList.contains('hidden')) {
+            if (e.key >= '0' && e.key <= '9') {
+                pinInput(e.key);
+            } else if (e.key === 'Backspace') {
+                pinBackspace();
+            } else if (e.key === 'Escape' || e.key === 'Delete') {
+                pinClear();
+            }
+        }
+    });
+
+})();
+</script>
+
+</body>
+</html>

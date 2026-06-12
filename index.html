@@ -1,0 +1,1752 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>IN FRONT OF.. | Specialty Coffee & Desserts — Riyadh</title>
+    <meta name="description" content="Skip the app fees. Order specialty coffee and desserts direct from IN FRONT OF.. in Riyadh.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Tajawal:wght@300;400;500;700;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        infrontof: { accent: '#135c51', dark: '#080c0a', warm: '#fbf9f4' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* ── RESET & BASE ── */
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body, .glass, nav, div, p, span, h1, h2, h3, h4, button, section, footer, input, textarea {
+            transition: background-color 0.7s cubic-bezier(0.4,0,0.2,1),
+                        border-color 0.7s cubic-bezier(0.4,0,0.2,1),
+                        color 0.7s cubic-bezier(0.4,0,0.2,1),
+                        box-shadow 0.7s cubic-bezier(0.4,0,0.2,1);
+        }
+
+        body {
+            background: #faf8f4;
+            background-image: radial-gradient(ellipse 120% 60% at 50% -10%, #e8ddd0 0%, transparent 70%);
+            color: #1a1713;
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent; /* Removes blue tap highlight on mobile */
+        }
+        html.dark body {
+            background: #0c0b09;
+            background-image: radial-gradient(ellipse 120% 60% at 50% -10%, #0d2822 0%, transparent 70%);
+            color: #f0ebe3;
+        }
+        html[lang="ar"] body { font-family: 'Tajawal', sans-serif; }
+
+        /* ── GLASS SYSTEM ── */
+        .glass {
+            background: rgba(255,255,255,0.55);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.75);
+            box-shadow: 0 8px 32px -8px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9);
+        }
+        html.dark .glass {
+            background: rgba(12,18,15,0.6);
+            border: 1px solid rgba(255,255,255,0.07);
+            box-shadow: 0 8px 32px -8px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05);
+        }
+        .glass-strong {
+            background: rgba(255,255,255,0.75);
+            backdrop-filter: blur(40px) saturate(200%);
+            -webkit-backdrop-filter: blur(40px) saturate(200%);
+            border: 1px solid rgba(255,255,255,0.9);
+            box-shadow: 0 12px 48px -12px rgba(0,0,0,0.1);
+        }
+        html.dark .glass-strong {
+            background: rgba(28,23,16,0.8);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .gold-border { border: 1px solid rgba(19,92,81,0.4); box-shadow: 0 0 24px rgba(19,92,81,0.12), inset 0 1px 0 rgba(19,92,81,0.1); }
+
+        /* ── LANGUAGE / DIR ── */
+        html[lang="en"] .ar-only { display: none !important; }
+        html[lang="ar"] .en-only { display: none !important; }
+
+        /* ── SCROLLBAR ── */
+        .no-scrollbar::-webkit-scrollbar { display: none !important; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* ── TAB ACTIVE ── */
+        .tab-active { background: #1a1713 !important; color: #fff !important; }
+        html.dark .tab-active { background: #c68d58 !important; color: #fff !important; }
+
+        /* ── TOAST ── */
+        @keyframes toastPop {
+            0%   { transform: translate(-50%,-200%) scale(0.9); opacity:0; }
+            12%  { transform: translate(-50%, max(16px, env(safe-area-inset-top))) scale(1.02); opacity:1; }
+            15%  { transform: translate(-50%, max(12px, env(safe-area-inset-top))) scale(1); opacity:1; }
+            80%  { transform: translate(-50%, max(12px, env(safe-area-inset-top))) scale(1); opacity:1; }
+            100% { transform: translate(-50%,-200%) scale(0.9); opacity:0; }
+        }
+        .toast-show { animation: toastPop 3.2s cubic-bezier(0.4,0,0.2,1) forwards; }
+
+        /* ── MARQUEE ── */
+        .marquee-wrap {
+            overflow: hidden; width:100%;
+            mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+        }
+        .marquee-track { display:flex; width:max-content; gap:1.25rem; }
+        .marquee-track:hover { animation-play-state: paused; }
+        html[lang="en"] .marquee-track { animation: marqLeft 40s linear infinite; }
+        html[lang="ar"] .marquee-track { animation: marqRight 40s linear infinite; }
+        @keyframes marqLeft  { to { transform: translateX(-50%); } }
+        @keyframes marqRight { to { transform: translateX(50%); } }
+
+        /* ── PARTICLE BEANS ── */
+        @keyframes beanFall {
+            0%   { transform: translateY(-8vh) rotate(0deg); opacity:0; }
+            8%   { opacity:.5; }
+            90%  { opacity:.5; }
+            100% { transform: translateY(108vh) rotate(400deg); opacity:0; }
+        }
+        .bean { position:fixed; top:-8%; z-index:0; pointer-events:none; animation: beanFall linear infinite; }
+        html.dark .bean { opacity:.25; }
+
+        /* ── HERO COUNTER ── */
+        @keyframes countUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+        .stat-num { animation: countUp 0.6s ease both; }
+
+        /* ── CARD HOVER ── */
+        .menu-card { cursor:pointer; }
+        @media (hover: hover) {
+            .menu-card:hover { transform: translateY(-3px) scale(1.015); }
+        }
+        .menu-card { transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s ease; }
+
+        /* ── BREW TIMER RING ── */
+        .ring-track { fill:none; stroke: rgba(198,141,88,0.15); stroke-width:5; }
+        .ring-fill { fill:none; stroke:#c68d58; stroke-width:5; stroke-linecap:round; transform:rotate(-90deg); transform-origin:center; transition: stroke-dashoffset 1s linear; }
+
+        /* ── PULSE DOT ── */
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+        .pulse { animation: pulse 1.8s ease-in-out infinite; }
+
+        /* ── MODAL OPEN ── */
+        .modal-enter { animation: modalIn 0.35s cubic-bezier(0.4,0,0.2,1) both; }
+        @keyframes modalIn { from{opacity:0;transform:scale(0.92) translateY(16px)} to{opacity:1;transform:none} }
+
+        /* ── CART ITEM ADD ── */
+        @keyframes itemPop { 0%{transform:scale(1)} 40%{transform:scale(1.08)} 100%{transform:scale(1)} }
+        .item-pop { animation: itemPop 0.25s ease; }
+
+        /* ── SKELETON LOADER ── */
+        @keyframes shimmer { from{background-position:-200% 0} to{background-position:200% 0} }
+        .skeleton {
+            background: linear-gradient(90deg, rgba(0,0,0,0.05) 25%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.05) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.4s ease infinite;
+            border-radius:0.75rem;
+        }
+
+        /* ── PROGRESS BAR ── */
+        .progress-bar { height:3px; background: linear-gradient(90deg, #c68d58, #e8b97a, #c68d58); background-size:200%; animation: progressShift 2s linear infinite; }
+        @keyframes progressShift { to { background-position: -200%; } }
+
+        /* ── SEARCH INPUT ── */
+        .search-input:focus { outline:none; border-color:#c68d58; box-shadow: 0 0 0 3px rgba(198,141,88,0.15); }
+
+        /* ── CUSTOM CHECKBOX ── */
+        .custom-check { accent-color: #c68d58; width:18px; height:18px; cursor:pointer; }
+
+        /* ── RTL CART DRAWER ── */
+        html[dir="rtl"] #cartDrawer { right:auto; left:0; transform: translateX(-100%); border-radius:0 1.5rem 1.5rem 0; }
+        html[dir="rtl"] #cartDrawer.open { transform: translateX(0); }
+        #cartDrawer.open { transform: translateX(0) !important; }
+
+        /* ── QUANTITY CONTROL ── */
+        .qty-btn { width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:1.2rem;line-height:1;transition:background 0.2s; cursor:pointer; }
+        .qty-btn:hover { background: rgba(198,141,88,0.2); }
+
+        /* ── LOYALTY PROGRESS ── */
+        .loyalty-fill { height:6px; background: linear-gradient(90deg,#c68d58,#e8b97a); border-radius:3px; transition:width 0.5s ease; }
+
+        /* ── ORDER TRACKER ── */
+        .tracker-step { position:relative; }
+        .tracker-step:not(:last-child)::after { content:''; position:absolute; left:50%; top:100%; width:2px; height:24px; background:currentColor; opacity:0.2; transform:translateX(-50%); }
+        html[dir="rtl"] .tracker-step:not(:last-child)::after { left:auto; right:50%; transform:translateX(50%); }
+
+        /* ── RIPPLE ── */
+        .ripple-btn { position:relative; overflow:hidden; }
+        .ripple-btn::after { content:''; position:absolute; inset:0; background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%); transform:scale(0); opacity:0; border-radius:inherit; transition: transform 0.4s ease, opacity 0.4s ease; }
+        .ripple-btn:active::after { transform:scale(2.5); opacity:1; transition:none; }
+
+        /* ── SCROLL REVEAL ── */
+        .reveal { opacity:0; transform:translateY(20px); transition:opacity 0.6s ease, transform 0.6s ease; }
+        .reveal.visible { opacity:1; transform:none; }
+
+        /* ── STICKY NAV BACKDROP ── */
+        #mainNav { transition: padding 0.3s ease, backdrop-filter 0.3s ease; }
+        #mainNav.scrolled .nav-inner { box-shadow: 0 4px 24px rgba(0,0,0,0.12); }
+
+        /* ── ALLERGEN TAG ── */
+        .allergen-tag { font-size:0.6rem; padding:2px 6px; border-radius:99px; background:rgba(198,141,88,0.12); color:#c68d58; font-weight:700; }
+
+        /* ── HEAT BADGE ── */
+        .spicy-tag { font-size:0.6rem; padding:2px 6px; border-radius:99px; background:rgba(239,68,68,0.1); color:#ef4444; font-weight:700; }
+
+        @media (max-width:640px) {
+            .hero-title { font-size: clamp(2.4rem, 11vw, 4rem); }
+        }
+    </style>
+</head>
+<body class="antialiased pb-32 relative">
+
+    <div id="particleLayer" class="fixed inset-0 overflow-hidden pointer-events-none z-0"></div>
+
+    <div id="pageProgress" class="fixed top-0 left-0 right-0 z-[200] progress-bar" style="opacity:1; transition:opacity 0.5s;"></div>
+
+    <div id="toast" class="fixed top-0 left-1/2 -translate-x-1/2 z-[150] glass-strong !rounded-full px-5 py-3 text-sm font-semibold flex items-center gap-2.5 pointer-events-none border border-infrontof-accent/30" style="transform:translate(-50%,-200%)">
+        <span id="toastIcon" class="text-base">✓</span>
+        <span id="toastMsg"></span>
+    </div>
+
+    <nav id="mainNav" class="fixed w-full z-50 px-4 pt-4 pb-2">
+        <div class="nav-inner glass !rounded-[2rem] mx-auto max-w-5xl px-4 md:px-5 py-2.5 flex justify-between items-center">
+            <button onclick="scrollToTop()" class="flex items-center gap-2 hover:opacity-80 transition group select-none">
+                <div class="w-8 h-8 border border-current flex flex-col items-center justify-center text-[6px] font-black leading-none tracking-tighter p-0.5 rounded-sm shadow-md group-hover:rotate-12 transition-transform duration-300 shrink-0">
+                    <span>IN</span>
+                    <span>FRONT</span>
+                    <span>OF..</span>
+                </div>
+                <span class="font-black tracking-wider text-base en-only">IN FRONT OF..</span>
+                <span class="font-black text-lg ar-only">ان فرونت اوف</span>
+            </button>
+
+            <div class="hidden md:flex items-center gap-1.5 text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-3 py-1.5 rounded-full">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 pulse"></span>
+                <span class="en-only">Open · Al Arid, Riyadh</span>
+                <span class="ar-only">مفتوح · العارض، الرياض</span>
+            </div>
+
+            <div class="flex items-center gap-1.5 md:gap-2">
+                <button onclick="toggleSearch()" id="searchBtn" class="w-10 h-10 glass !rounded-full flex items-center justify-center hover:scale-105 transition text-base select-none shrink-0">🔍</button>
+                <button onclick="openTrackingModal()" class="w-10 h-10 glass !rounded-full flex items-center justify-center hover:scale-105 transition text-base select-none shrink-0" title="Track Order">📦</button>
+                <button onclick="toggleTheme()" class="w-10 h-10 glass !rounded-full flex items-center justify-center hover:scale-105 transition text-base select-none shrink-0">
+                    <span id="themeIcon">🌙</span>
+                </button>
+                <button onclick="toggleLang()" class="glass !rounded-full px-3 h-10 flex items-center justify-center text-xs font-bold hover:scale-105 transition select-none shrink-0">
+                    <span class="en-only">عربي</span><span class="ar-only">EN</span>
+                </button>
+                <button onclick="toggleCart()" class="ripple-btn bg-infrontof-accent text-white rounded-full px-4 h-10 text-sm font-bold shadow-lg hover:shadow-infrontof-accent/30 hover:shadow-xl hover:scale-105 transition flex items-center justify-center gap-1.5 select-none shrink-0">
+                    <span>🛍</span>
+                    <span class="en-only hidden sm:inline">Cart</span><span class="ar-only hidden sm:inline">سلة</span>
+                    <span class="bg-white/25 rounded-full w-5 h-5 flex items-center justify-center text-xs font-black" id="navCount">0</span>
+                </button>
+            </div>
+        </div>
+
+        <div id="searchBar" class="overflow-hidden" style="max-height:0; transition:max-height 0.4s cubic-bezier(0.4,0,0.2,1);">
+            <div class="glass-strong mx-auto max-w-5xl mt-2 !rounded-2xl px-4 md:px-5 py-3 flex items-center gap-3">
+                <span class="opacity-50">🔍</span>
+                <input id="searchInput" type="text" oninput="searchMenu(this.value)"
+                    class="search-input flex-grow bg-transparent text-base md:text-sm font-medium placeholder-current placeholder-opacity-40 border border-transparent rounded-xl px-3 py-1.5 transition"
+                    placeholder="Search drinks, bakery... / ابحث عن مشروب...">
+                <button onclick="clearSearch()" class="text-xs opacity-50 hover:opacity-100 font-bold transition p-2 select-none">✕</button>
+            </div>
+        </div>
+    </nav>
+
+    <div id="cartOverlay" class="fixed inset-0 bg-black/40 z-[70] hidden backdrop-blur-sm" onclick="toggleCart()"></div>
+
+    <div id="cartDrawer" class="fixed top-0 right-0 h-full w-full md:w-[420px] glass-strong z-[80] transform translate-x-full flex flex-col border-l border-white/30 dark:border-white/05 shadow-2xl transition-transform duration-500 !rounded-none pb-[env(safe-area-inset-bottom)]">
+        <div class="px-5 md:px-6 py-5 mt-[env(safe-area-inset-top)] border-b border-black/5 dark:border-white/5 flex items-center justify-between">
+            <div>
+                <h2 class="font-black text-lg tracking-wide en-only">Your Order</h2>
+                <h2 class="font-black text-lg ar-only">طلبك</h2>
+                <p class="text-xs opacity-50 mt-0.5 en-only">Al Olaya · Pickup in ~8 min</p>
+                <p class="text-xs opacity-50 mt-0.5 ar-only">العليا · استلام خلال ~٨ دقائق</p>
+            </div>
+            <button onclick="toggleCart()" class="w-10 h-10 glass !rounded-full flex items-center justify-center hover:text-infrontof-accent font-bold transition select-none">✕</button>
+        </div>
+
+        <div id="orderTracker" class="hidden px-6 py-3 bg-infrontof-accent/5 border-b border-infrontof-accent/10">
+            <div class="flex items-center justify-between text-xs">
+                <div class="tracker-step flex flex-col items-center gap-1 text-infrontof-accent font-bold">
+                    <span class="text-lg">📝</span><span class="en-only">Order</span><span class="ar-only">طلب</span>
+                </div>
+                <div class="flex-1 h-px bg-infrontof-accent/20 mx-2"></div>
+                <div class="tracker-step flex flex-col items-center gap-1 opacity-40 font-bold">
+                    <span class="text-lg">☕</span><span class="en-only">Brewing</span><span class="ar-only">تحضير</span>
+                </div>
+                <div class="flex-1 h-px bg-black/10 dark:bg-white/10 mx-2"></div>
+                <div class="tracker-step flex flex-col items-center gap-1 opacity-40 font-bold">
+                    <span class="text-lg">✅</span><span class="en-only">Ready</span><span class="ar-only">جاهز</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="cartItems" class="flex-grow overflow-y-auto no-scrollbar px-5 md:px-6 py-4 space-y-2">
+            <div class="flex flex-col items-center justify-center h-full opacity-40 text-center gap-3">
+                <span class="text-5xl">☕</span>
+                <p class="text-sm font-medium en-only">Your cart is empty.<br>Add something delicious.</p>
+                <p class="text-sm font-medium ar-only">سلتك فارغة.<br>أضف شيئاً لذيذاً.</p>
+            </div>
+        </div>
+
+        <div class="px-5 md:px-6 pb-2">
+            <button onclick="toggleNotes()" class="text-xs text-infrontof-accent font-semibold flex items-center gap-1 hover:opacity-80 transition py-2 select-none">
+                <span id="notesIcon">＋</span>
+                <span class="en-only">Add special instructions</span>
+                <span class="ar-only">إضافة ملاحظات خاصة</span>
+            </button>
+            <div id="notesBox" style="max-height:0;overflow:hidden;transition:max-height 0.3s ease">
+                <textarea id="specialNotes" rows="2" placeholder="E.g. Less sugar, oat milk… / مثال: سكر خفيف، حليب شوفان..."
+                    class="w-full mt-2 text-base md:text-sm bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl p-3 resize-none focus:outline-none focus:border-infrontof-accent transition placeholder-opacity-50"></textarea>
+            </div>
+        </div>
+
+        <div class="px-5 md:px-6 py-5 border-t border-black/5 dark:border-white/5 space-y-3">
+            <div>
+                <div class="flex justify-between text-xs mb-1.5 font-semibold">
+                    <span class="opacity-60 en-only">Loyalty Points</span>
+                    <span class="opacity-60 ar-only">نقاط الولاء</span>
+                    <span class="text-infrontof-accent">⭐ <span id="loyaltyPts">0</span> pts</span>
+                </div>
+                <div class="h-1.5 rounded-full bg-black/5 dark:bg-white/10 overflow-hidden">
+                    <div id="loyaltyBar" class="loyalty-fill" style="width:0%"></div>
+                </div>
+                <p class="text-xs opacity-40 mt-1 en-only">Earn 10 pts per SAR · 500 pts = free drink</p>
+                <p class="text-xs opacity-40 mt-1 ar-only">اكسب ١٠ نقطة لكل ريال · ٥٠٠ نقطة = مشروب مجاني</p>
+            </div>
+
+            <div class="flex gap-2">
+                <input id="promoInput" type="text" placeholder="Promo code / كود خصم"
+                    class="flex-grow text-base md:text-sm bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2 focus:outline-none focus:border-infrontof-accent transition placeholder-opacity-50">
+                <button onclick="applyPromo()" class="glass !rounded-xl px-4 py-2 text-sm md:text-xs font-bold hover:bg-infrontof-accent hover:text-white transition select-none">
+                    <span class="en-only">Apply</span><span class="ar-only">تطبيق</span>
+                </button>
+            </div>
+            <div id="promoMsg" class="text-xs font-semibold hidden"></div>
+
+            <div class="flex justify-between items-center pt-1">
+                <span class="font-bold text-base en-only">Total</span>
+                <span class="font-bold text-base ar-only">المجموع</span>
+                <div class="text-right">
+                    <span id="originalTotal" class="text-xs line-through opacity-40 mr-1 hidden"></span>
+                    <span class="font-black text-xl text-infrontof-accent"><span id="cartTotal">0</span> SAR</span>
+                </div>
+            </div>
+
+            <button onclick="openCheckoutModal()" class="ripple-btn w-full bg-infrontof-accent text-white py-4 rounded-2xl font-black shadow-[0_8px_32px_rgba(198,141,88,0.3)] flex items-center justify-center gap-2 hover:scale-[1.02] hover:shadow-[0_12px_40px_rgba(198,141,88,0.4)] transition text-base select-none">
+                <span>☕</span>
+                <span class="en-only">Place Order — Pay at Counter</span>
+                <span class="ar-only">أرسل الطلب — ادفع عند الكاشير</span>
+            </button>
+        </div>
+    </div>
+
+    <div id="upsellModal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-md" onclick="closeUpsell()"></div>
+        <div class="glass-strong w-full max-w-sm mx-4 relative z-10 !rounded-3xl overflow-hidden border-2 border-infrontof-accent/50 modal-enter">
+            <button onclick="closeUpsell()" class="absolute top-3 end-3 w-10 h-10 bg-black/50 text-white rounded-full flex items-center justify-center hover:bg-black z-10 text-sm font-bold select-none">✕</button>
+            <div class="relative">
+                <img src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=500&auto=format&fit=crop&q=80" class="w-full h-52 object-cover" alt="Pistachio Latte">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                <div class="absolute bottom-3 start-4">
+                    <span class="bg-infrontof-accent text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full">
+                        <span class="en-only">⭐ Best Seller</span><span class="ar-only">⭐ الأكثر مبيعاً</span>
+                    </span>
+                </div>
+            </div>
+            <div class="p-6 text-center">
+                <h3 class="font-black text-2xl mb-2 en-only" style="font-family:'Playfair Display',serif;">Signature Pistachio Latte</h3>
+                <h3 class="font-black text-2xl mb-2 ar-only">بيستاشيو لاتيه خاص</h3>
+                <p class="text-sm opacity-60 mb-5 en-only">Rich espresso, house-made pistachio syrup, steamed milk. Iced or hot.</p>
+                <p class="text-sm opacity-60 mb-5 ar-only">اسبريسو غني، شراب الفستق منزلي الصنع، حليب مبخر. بارد أو ساخن.</p>
+                <div class="flex gap-3">
+                    <button onclick="closeUpsell()" class="flex-1 glass !rounded-xl py-3 text-sm font-bold opacity-60 hover:opacity-100 transition select-none">
+                        <span class="en-only">Not now</span><span class="ar-only">ليس الآن</span>
+                    </button>
+                    <button onclick="addUpsellItem()" class="ripple-btn flex-1 bg-infrontof-accent text-white rounded-xl py-3 text-sm font-black hover:scale-105 transition shadow-lg select-none">
+                        <span class="en-only">Add — 28 SAR</span><span class="ar-only">أضف — ٢٨ ر</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="itemModal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-md" onclick="closeItemModal()"></div>
+        <div id="itemModalContent" class="glass-strong w-full max-w-sm mx-4 relative z-10 !rounded-3xl overflow-hidden border border-infrontof-accent/20 modal-enter"></div>
+    </div>
+
+    <div id="reviewModal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="toggleReviewModal()"></div>
+        <div class="glass-strong w-full max-w-md mx-4 p-6 md:p-8 relative z-10 !rounded-3xl border border-infrontof-accent/20 modal-enter">
+            <button onclick="toggleReviewModal()" class="absolute top-4 end-4 w-10 h-10 flex items-center justify-center opacity-50 hover:opacity-100 text-xl font-bold transition select-none">✕</button>
+            <h3 class="font-black text-2xl mb-1 en-only mt-2" style="font-family:'Playfair Display',serif;">How was it?</h3>
+            <h3 class="font-black text-2xl mb-1 ar-only mt-2">كيف كانت تجربتك؟</h3>
+            <p class="text-sm opacity-50 mb-5 en-only">Your honest feedback shapes every cup we make.</p>
+            <p class="text-sm opacity-50 mb-5 ar-only">ملاحظاتك الصادقة تُشكّل كل كوب نصنعه.</p>
+            <div id="starRow" class="flex justify-center gap-3 mb-6 text-4xl select-none">
+                <button onclick="setRating(1)" class="hover:scale-110 transition cursor-pointer p-2 -m-2">★</button>
+                <button onclick="setRating(2)" class="hover:scale-110 transition cursor-pointer p-2 -m-2">★</button>
+                <button onclick="setRating(3)" class="hover:scale-110 transition cursor-pointer p-2 -m-2">★</button>
+                <button onclick="setRating(4)" class="hover:scale-110 transition cursor-pointer p-2 -m-2">★</button>
+                <button onclick="setRating(5)" class="hover:scale-110 transition cursor-pointer p-2 -m-2">★</button>
+            </div>
+            <input id="revName" type="text" placeholder="Your name / اسمك"
+                class="w-full text-base md:text-sm bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-4 py-3 mb-3 focus:outline-none focus:border-infrontof-accent transition">
+            <textarea id="revText" rows="3" placeholder="Tell us about it... / أخبرنا عن تجربتك..."
+                class="w-full text-base md:text-sm bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-4 py-3 mb-5 focus:outline-none focus:border-infrontof-accent resize-none transition"></textarea>
+            <button onclick="submitReview()" class="ripple-btn w-full bg-infrontof-accent text-white py-3.5 rounded-xl font-black shadow-lg hover:scale-105 transition select-none">
+                <span class="en-only">Post Review</span><span class="ar-only">نشر التقييم</span>
+            </button>
+        </div>
+    </div>
+
+    <div id="checkoutModal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-md" onclick="closeCheckoutModal()"></div>
+        <div class="glass-strong w-full max-w-md mx-4 p-6 md:p-8 relative z-10 !rounded-3xl border border-infrontof-accent/20 modal-enter">
+            <button onclick="closeCheckoutModal()" class="absolute top-4 end-4 w-10 h-10 flex items-center justify-center opacity-50 hover:opacity-100 text-xl font-bold transition select-none">✕</button>
+            <h3 class="font-black text-2xl mb-1 en-only mt-2" style="font-family:'Playfair Display',serif;">Almost there!</h3>
+            <h3 class="font-black text-2xl mb-1 ar-only mt-2">أوشكت!</h3>
+            <p class="text-sm opacity-50 mb-5 en-only">Enter your name so the barista can call you.</p>
+            <p class="text-sm opacity-50 mb-5 ar-only">أدخل اسمك حتى يتمكن الباريستا من مناداتك.</p>
+            <input id="checkoutName" type="text" placeholder="Your name / اسمك"
+                class="w-full text-base md:text-sm bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-4 py-3 mb-3 focus:outline-none focus:border-infrontof-accent transition">
+            <input id="checkoutPhone" type="tel" placeholder="Phone (optional) / الهاتف (اختياري)"
+                class="w-full text-base md:text-sm bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-4 py-3 mb-5 focus:outline-none focus:border-infrontof-accent transition" dir="ltr">
+            <div id="checkoutSummary" class="glass !rounded-xl p-4 mb-5 space-y-1 text-sm max-h-40 overflow-y-auto no-scrollbar"></div>
+            <button id="submitOrderBtn" onclick="submitOrder()" class="ripple-btn w-full bg-infrontof-accent text-white py-3.5 rounded-xl font-black shadow-lg hover:scale-105 transition select-none flex items-center justify-center gap-2">
+                <span class="en-only">Confirm & Place Order</span>
+                <span class="ar-only">تأكيد وإرسال الطلب</span>
+            </button>
+            <p class="text-xs opacity-40 text-center mt-3 en-only">💳 Pay at the counter when you pick up</p>
+            <p class="text-xs opacity-40 text-center mt-3 ar-only">💳 ادفع عند الكاشير عند الاستلام</p>
+        </div>
+    </div>
+
+    <div id="confirmModal" class="fixed inset-0 z-[110] hidden items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-md"></div>
+        <div class="glass-strong w-full max-w-sm mx-4 p-8 relative z-10 !rounded-3xl border-2 border-emerald-500/30 modal-enter text-center">
+            <div class="text-6xl mb-4">✅</div>
+            <h3 class="font-black text-2xl mb-2 en-only" style="font-family:'Playfair Display',serif;">Order Placed!</h3>
+            <h3 class="font-black text-2xl mb-2 ar-only">تم إرسال الطلب!</h3>
+            <p class="text-sm opacity-60 mb-5 en-only">Your order has been sent to the barista.</p>
+            <p class="text-sm opacity-60 mb-5 ar-only">تم إرسال طلبك إلى الباريستا.</p>
+            <div class="glass !rounded-2xl p-5 mb-4 gold-border">
+                <p class="text-xs opacity-50 mb-1 en-only">Order Number</p>
+                <p class="text-xs opacity-50 mb-1 ar-only">رقم الطلب</p>
+                <p id="confirmOrderNum" class="font-black text-3xl text-infrontof-accent mb-3" style="font-family:'Playfair Display',serif;"></p>
+                <p class="text-xs opacity-50 mb-1 en-only">Tracking Code</p>
+                <p class="text-xs opacity-50 mb-1 ar-only">كود التتبع</p>
+                <p id="confirmTrackCode" class="font-black text-xl tracking-[0.3em]"></p>
+            </div>
+            <p class="text-xs opacity-50 mb-5 en-only">Save this code to track your order status anytime.</p>
+            <p class="text-xs opacity-50 mb-5 ar-only">احفظ هذا الكود لتتبع حالة طلبك في أي وقت.</p>
+            <div class="flex gap-3">
+                <button onclick="closeConfirmAndTrack()" class="ripple-btn flex-1 bg-infrontof-accent text-white rounded-xl py-3 font-black hover:scale-105 transition shadow-lg text-sm select-none">
+                    <span class="en-only">📦 Track Order</span>
+                    <span class="ar-only">📦 تتبع الطلب</span>
+                </button>
+                <button onclick="closeConfirmModal()" class="flex-1 glass !rounded-xl py-3 text-sm font-bold opacity-60 hover:opacity-100 transition select-none">
+                    <span class="en-only">Done</span><span class="ar-only">تم</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="trackingModal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-md" onclick="closeTrackingModal()"></div>
+        <div class="glass-strong w-full max-w-md mx-4 p-6 md:p-8 relative z-10 !rounded-3xl border border-infrontof-accent/20 modal-enter">
+            <button onclick="closeTrackingModal()" class="absolute top-4 end-4 w-10 h-10 flex items-center justify-center opacity-50 hover:opacity-100 text-xl font-bold transition select-none">✕</button>
+            <h3 class="font-black text-2xl mb-1 en-only mt-2" style="font-family:'Playfair Display',serif;">Track Your Order</h3>
+            <h3 class="font-black text-2xl mb-1 ar-only mt-2">تتبع طلبك</h3>
+            <p class="text-sm opacity-50 mb-5 en-only">Enter the tracking code you received.</p>
+            <p class="text-sm opacity-50 mb-5 ar-only">أدخل كود التتبع الذي استلمته.</p>
+            <div id="trackInputSection">
+                <div class="flex gap-2 mb-4">
+                    <input id="trackCodeInput" type="text" placeholder="e.g. ABC123" maxlength="6"
+                        class="flex-grow text-base md:text-sm bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-infrontof-accent transition uppercase tracking-widest font-bold text-center" dir="ltr"
+                        onkeydown="if(event.key==='Enter')lookupOrder()">
+                    <button onclick="lookupOrder()" class="glass !rounded-xl px-5 py-3 font-bold text-sm hover:bg-infrontof-accent hover:text-white transition select-none shrink-0">
+                        <span class="en-only">Track</span><span class="ar-only">تتبع</span>
+                    </button>
+                </div>
+                <div id="trackError" class="text-red-400 text-xs font-semibold hidden mb-3 text-center"></div>
+            </div>
+            <div id="trackResultSection" class="hidden">
+                <div class="glass !rounded-2xl p-5 mb-4 gold-border text-center">
+                    <p id="trackOrderNum" class="font-black text-2xl text-infrontof-accent mb-1" style="font-family:'Playfair Display',serif;"></p>
+                    <p id="trackStatusBadge" class="inline-block text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full mb-4"></p>
+                    <div id="trackBaristaNoteContainer" class="hidden mb-4 p-3 rounded-xl border text-xs leading-relaxed text-start bg-yellow-500/10 border-yellow-500/20 text-yellow-600 dark:text-yellow-400"></div>
+                    <div class="flex items-center justify-between text-xs mt-4 px-2">
+                        <div class="flex flex-col items-center gap-1 font-bold" id="trackStep1">
+                            <span class="text-2xl">📝</span><span class="en-only">Placed</span><span class="ar-only">طلب</span>
+                        </div>
+                        <div class="flex-1 h-px mx-2" id="trackLine1"></div>
+                        <div class="flex flex-col items-center gap-1 font-bold" id="trackStep2">
+                            <span class="text-2xl">☕</span><span class="en-only">Preparing</span><span class="ar-only">تحضير</span>
+                        </div>
+                        <div class="flex-1 h-px mx-2" id="trackLine2"></div>
+                        <div class="flex flex-col items-center gap-1 font-bold" id="trackStep3">
+                            <span class="text-2xl">✅</span><span class="en-only">Ready</span><span class="ar-only">جاهز</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="trackItemsList" class="space-y-1 mb-4 text-sm"></div>
+                <div id="trackTotal" class="flex justify-between font-black text-base mb-4 px-1"></div>
+                <div class="mb-4">
+                    <button id="shareTrackingBtn" onclick="shareOrderLink()" class="w-full glass !rounded-xl py-3 text-sm font-black text-[#135c51] dark:text-[#fbf9f4] border border-infrontof-accent/30 hover:bg-infrontof-accent hover:text-white transition flex items-center justify-center gap-2 select-none">
+                        <span>💬</span>
+                        <span class="en-only">Share Tracking on WhatsApp</span>
+                        <span class="ar-only">مشاركة التتبع عبر الواتساب</span>
+                    </button>
+                </div>
+                <div class="flex gap-3">
+                    <button id="cancelOrderBtn" onclick="cancelTrackedOrder()" class="flex-1 glass !rounded-xl py-3 text-sm font-bold text-red-400 border border-red-400/30 hover:bg-red-500/10 transition select-none">
+                        <span class="en-only">Cancel Order</span><span class="ar-only">إلغاء الطلب</span>
+                    </button>
+                    <button onclick="trackAnother()" class="flex-1 glass !rounded-xl py-3 text-sm font-bold opacity-60 hover:opacity-100 transition select-none">
+                        <span class="en-only">Track Another</span><span class="ar-only">تتبع آخر</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <header class="relative pt-36 pb-12 px-4 text-center z-10">
+        <div class="glass gold-border inline-flex items-center gap-2 px-5 py-2 !rounded-full mb-7 reveal">
+            <span class="w-2 h-2 rounded-full bg-infrontof-accent pulse"></span>
+            <span class="text-infrontof-accent text-xs font-black uppercase tracking-widest en-only">Crafted in Riyadh · Est. 2020</span>
+            <span class="text-infrontof-accent text-xs font-black uppercase tracking-widest ar-only">مصنوع في الرياض · منذ ٢٠٢٠</span>
+        </div>
+
+        <h1 class="hero-title font-black mb-5 leading-[1.05] tracking-tighter reveal uppercase" style="font-family:'Playfair Display',serif; font-size:clamp(3rem,9vw,5.5rem);">
+            <span class="en-only">Moments in<br><em class="not-italic bg-gradient-to-r from-infrontof-accent via-yellow-500 to-infrontof-accent bg-clip-text text-transparent" style="background-size:200%; animation:progressShift 4s linear infinite;">FRONT OF..</em></span>
+            <span class="ar-only">لحظاتك المميزة<br><em class="not-italic bg-gradient-to-l from-infrontof-accent via-yellow-500 to-infrontof-accent bg-clip-text text-transparent" style="background-size:200%; animation:progressShift 4s linear infinite;">أمامك..</em></span>
+        </h1>
+
+        <p class="text-base opacity-60 max-w-md mx-auto leading-relaxed mb-10 reveal px-2">
+            <span class="en-only">Something special in front of you - because great moments often start with great coffee.</span>
+            <span class="ar-only">شيء مميز أمامك - لأن اللحظات الرائعة تبدأ دائماً بقهوة رائعة.</span>
+        </p>
+
+        <div class="flex flex-wrap justify-center gap-3 md:gap-4 mb-10 reveal">
+            <div class="glass !rounded-2xl px-5 md:px-6 py-4 text-center flex-1 min-w-[100px] max-w-[140px]">
+                <p class="font-black text-2xl text-infrontof-accent stat-num">4.9</p>
+                <p class="text-xs opacity-50 mt-0.5 en-only">Avg Rating</p>
+                <p class="text-xs opacity-50 mt-0.5 ar-only">متوسط التقييم</p>
+            </div>
+            <div class="glass !rounded-2xl px-5 md:px-6 py-4 text-center flex-1 min-w-[100px] max-w-[140px]">
+                <p class="font-black text-2xl text-infrontof-accent stat-num">~8<span class="text-base">min</span></p>
+                <p class="text-xs opacity-50 mt-0.5 en-only">Pickup Time</p>
+                <p class="text-xs opacity-50 mt-0.5 ar-only">وقت الاستلام</p>
+            </div>
+            <div class="glass !rounded-2xl px-5 md:px-6 py-4 text-center flex-1 min-w-[100px] max-w-[140px]">
+                <p class="font-black text-2xl text-infrontof-accent stat-num">0<span class="text-base">%</span></p>
+                <p class="text-xs opacity-50 mt-0.5 en-only">App Fees</p>
+                <p class="text-xs opacity-50 mt-0.5 ar-only">رسوم تطبيق</p>
+            </div>
+        </div>
+
+        <div class="glass gold-border inline-flex items-center gap-4 px-5 py-4 !rounded-2xl mb-2 reveal max-w-full text-left rtl:text-right">
+            <div class="relative w-14 h-14 shrink-0">
+                <svg class="w-14 h-14" viewBox="0 0 56 56">
+                    <circle class="ring-track" cx="28" cy="28" r="23"></circle>
+                    <circle id="timerRing" class="ring-fill" cx="28" cy="28" r="23" stroke-dasharray="144.5" stroke-dashoffset="0"></circle>
+                </svg>
+                <span id="timerDisplay" class="absolute inset-0 flex items-center justify-center font-black text-sm text-infrontof-accent">8:00</span>
+            </div>
+            <div>
+                <p class="font-black text-sm en-only">Estimated Prep</p>
+                <p class="font-black text-sm ar-only">وقت التحضير المتوقع</p>
+                <p class="text-xs opacity-50 en-only">Your order is prepared fresh on demand</p>
+                <p class="text-xs opacity-50 ar-only">طلبك يُحضَّر طازجاً عند الطلب</p>
+            </div>
+        </div>
+    </header>
+
+    <div id="menuAnchor" class="-mt-6 pt-6"></div>
+
+    <section class="px-4 max-w-5xl mx-auto relative z-10 min-h-screen">
+
+        <div class="sticky top-[72px] z-30 py-3 w-full">
+            <div class="glass !rounded-full inline-flex p-1.5 gap-1 shadow-xl max-w-full overflow-x-auto no-scrollbar justify-start md:justify-center w-full md:w-fit mx-auto block">
+                <button onclick="filterMenu('all')" id="tab-all" class="menu-tab tab-active px-5 py-2 rounded-full text-sm font-bold whitespace-nowrap transition select-none shrink-0">
+                    <span class="en-only">✦ All</span><span class="ar-only">✦ الكل</span>
+                </button>
+                <button onclick="filterMenu('hot')" id="tab-hot" class="menu-tab opacity-60 hover:opacity-100 px-5 py-2 rounded-full text-sm font-bold whitespace-nowrap transition select-none shrink-0">
+                    <span class="en-only">🔥 Hot</span><span class="ar-only">🔥 حار</span>
+                </button>
+                <button onclick="filterMenu('cold')" id="tab-cold" class="menu-tab opacity-60 hover:opacity-100 px-5 py-2 rounded-full text-sm font-bold whitespace-nowrap transition select-none shrink-0">
+                    <span class="en-only">🧊 Cold</span><span class="ar-only">🧊 بارد</span>
+                </button>
+                <button onclick="filterMenu('bakery')" id="tab-bakery" class="menu-tab opacity-60 hover:opacity-100 px-5 py-2 rounded-full text-sm font-bold whitespace-nowrap transition select-none shrink-0">
+                    <span class="en-only">🍰 Desserts</span><span class="ar-only">🍰 الحلويات</span>
+                </button>
+            </div>
+        </div>
+
+        <div id="noResults" class="hidden text-center py-20 opacity-40">
+            <p class="text-4xl mb-3">🔍</p>
+            <p class="font-semibold en-only">Nothing found. Try another search.</p>
+            <p class="font-semibold ar-only">لا نتائج. جرّب بحثاً آخر.</p>
+        </div>
+
+        <div class="mb-8 mt-4 reveal" id="sigSection">
+            <div class="flex items-center gap-2 mb-4">
+                <span class="text-infrontof-accent text-lg">★</span>
+                <h3 class="font-black text-xl en-only">In Front Of.. Signatures</h3>
+                <h3 class="font-black text-xl ar-only">التوقيعات المميزة</h3>
+                <span class="ms-auto text-xs opacity-40 font-medium en-only">tap card for details</span>
+                <span class="ms-auto text-xs opacity-40 font-medium ar-only">اضغط للتفاصيل</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
+                <!-- Matilda Cake (Signature #1) -->
+                <div class="menu-card menu-item glass gold-border !rounded-3xl p-4 md:p-5 flex gap-4 md:gap-5" data-category="bakery"
+                    data-name-en="Matilda Cake" data-name-ar="ماتيلدا كيك"
+                    data-desc-en="Signature double chocolate fudge cake served with warm chocolate sauce. Pure indulgence." data-desc-ar="كيكة الشوكولاتة الهشة والشهيرة بصوص الشوكولاتة الدافئ."
+                    data-price="26" data-img=""
+                    data-tags="gluten dairy" onclick="openItemModal(this)">
+                    <div class="flex-grow flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-2 mb-1.5">
+                                <span class="bg-infrontof-accent text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest">#1</span>
+                                <h4 class="font-black text-base en-only">Matilda Cake</h4>
+                                <h4 class="font-black text-base ar-only">ماتيلدا كيك</h4>
+                            </div>
+                            <p class="text-xs opacity-60 line-clamp-2 leading-relaxed mb-2 en-only">Signature chocolate fudge cake with warm chocolate sauce.</p>
+                            <p class="text-xs opacity-60 line-clamp-2 leading-relaxed mb-2 ar-only">كيكة الشوكولاتة الهشة بصوص الشوكولاتة الدافئ.</p>
+                            <div class="flex flex-wrap gap-1 mb-3"><span class="allergen-tag">🌾 Gluten</span><span class="allergen-tag">🥛 Dairy</span></div>
+                        </div>
+                        <div class="flex items-center justify-between mt-auto">
+                            <span class="font-black text-infrontof-accent text-lg">26 SAR</span>
+                            <button onclick="event.stopPropagation(); quickAdd('Matilda Cake','ماتيلدا كيك',26,this)"
+                                class="ripple-btn bg-infrontof-accent text-white px-4 py-1.5 rounded-full text-xs font-black hover:scale-105 transition shadow-md select-none">
+                                <span class="en-only">+ Add</span><span class="ar-only">+ أضف</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mango Truffle (Signature #2) -->
+                <div class="menu-card menu-item glass gold-border !rounded-3xl p-4 md:p-5 flex gap-4 md:gap-5" data-category="bakery"
+                    data-name-en="Mango Truffle" data-name-ar="مانجو ترافل"
+                    data-desc-en="Creamy mango truffle layers with fresh mango puree, fresh flower garnish. Bright and tropical." data-desc-ar="طبقات المانجو ترافل الغنية بالكريمة وهريس المانجو الطازج."
+                    data-price="24" data-img=""
+                    data-tags="dairy" onclick="openItemModal(this)">
+                    <div class="flex-grow flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-2 mb-1.5">
+                                <span class="bg-infrontof-accent text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest">#2</span>
+                                <h4 class="font-black text-base en-only">Mango Truffle</h4>
+                                <h4 class="font-black text-base ar-only">مانجو ترافل</h4>
+                            </div>
+                            <p class="text-xs opacity-60 line-clamp-2 leading-relaxed mb-2 en-only">Creamy mango layers with fresh puree and floral garnish.</p>
+                            <p class="text-xs opacity-60 line-clamp-2 leading-relaxed mb-2 ar-only">طبقات المانجو ترافل الغنية بالكريمة وهريس المانجو الطازج.</p>
+                            <div class="flex flex-wrap gap-1 mb-3"><span class="allergen-tag">🥛 Dairy</span></div>
+                        </div>
+                        <div class="flex items-center justify-between mt-auto">
+                            <span class="font-black text-infrontof-accent text-lg">24 SAR</span>
+                            <button onclick="event.stopPropagation(); quickAdd('Mango Truffle','مانجو ترافل',24,this)"
+                                class="ripple-btn bg-infrontof-accent text-white px-4 py-1.5 rounded-full text-xs font-black hover:scale-105 transition shadow-md select-none">
+                                <span class="en-only">+ Add</span><span class="ar-only">+ أضف</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        <div class="mb-4 reveal">
+            <h3 class="font-black text-xl opacity-70 mb-4 en-only">Full Menu</h3>
+            <h3 class="font-black text-xl opacity-70 mb-4 ar-only">القائمة الكاملة</h3>
+        </div>
+        <div id="menuGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
+
+            <!-- Cold Drinks -->
+            <div class="menu-card menu-item glass !rounded-2xl p-3 md:p-4 flex gap-3 md:gap-4" data-category="cold"
+                data-name-en="Iced Latte" data-name-ar="لاتيه بارد"
+                data-desc-en="Rich espresso blended with chilled whole milk over ice. Simple and refreshing." data-desc-ar="إسبريسو غني ممزوج مع حليب كامل الدسم مبرد على الثلج."
+                data-price="17" data-img="https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=300&auto=format&fit=crop"
+                data-tags="dairy" onclick="openItemModal(this)">
+                <div class="flex-grow flex flex-col justify-center">
+                    <h4 class="font-bold text-sm mb-0.5 en-only">Iced Latte</h4>
+                    <h4 class="font-bold text-sm mb-0.5 ar-only">لاتيه بارد</h4>
+                    <div class="flex gap-1 mb-2"><span class="allergen-tag">🥛 Dairy</span></div>
+                    <div class="flex items-center justify-between">
+                        <span class="font-black text-infrontof-accent text-sm">17 SAR</span>
+                        <button onclick="event.stopPropagation(); quickAdd('Iced Latte','لاتيه بارد',17,this)"
+                            class="glass !rounded-full px-3 py-1.5 text-xs font-bold hover:bg-infrontof-accent hover:text-white transition select-none">
+                            <span class="en-only">+ Add</span><span class="ar-only">+ أضف</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-card menu-item glass !rounded-2xl p-3 md:p-4 flex gap-3 md:gap-4" data-category="cold"
+                data-name-en="Iced Spanish Latte" data-name-ar="سبانيش لاتيه بارد"
+                data-desc-en="Espresso, sweetened condensed milk, whole milk over ice. Classic Gulf favorite." data-desc-ar="اسبريسو، حليب مكثف محلّى، وحليب على الثلج."
+                data-price="18" data-img="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=300&auto=format&fit=crop"
+                data-tags="dairy" onclick="openItemModal(this)">
+                <div class="flex-grow flex flex-col justify-center">
+                    <h4 class="font-bold text-sm mb-0.5 en-only">Iced Spanish Latte</h4>
+                    <h4 class="font-bold text-sm mb-0.5 ar-only">سبانيش لاتيه بارد</h4>
+                    <div class="flex gap-1 mb-2"><span class="allergen-tag">🥛 Dairy</span></div>
+                    <div class="flex items-center justify-between">
+                        <span class="font-black text-infrontof-accent text-sm">18 SAR</span>
+                        <button onclick="event.stopPropagation(); quickAdd('Iced Spanish Latte','سبانيش لاتيه بارد',18,this)"
+                            class="glass !rounded-full px-3 py-1.5 text-xs font-bold hover:bg-infrontof-accent hover:text-white transition select-none">
+                            <span class="en-only">+ Add</span><span class="ar-only">+ أضف</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-card menu-item glass !rounded-2xl p-3 md:p-4 flex gap-3 md:gap-4" data-category="cold"
+                data-name-en="Iced Matcha Latte" data-name-ar="ماتشا بارد"
+                data-desc-en="Ceremonial-grade Japanese Uji Matcha with cold milk over ice. Creamy & earthy." data-desc-ar="ماتشا يابانية فاخرة مع حليب بارد وثلج."
+                data-price="19" data-img="https://images.unsplash.com/photo-1536256263959-770b48d82b0a?w=300&auto=format&fit=crop"
+                data-tags="dairy" onclick="openItemModal(this)">
+                <div class="flex-grow flex flex-col justify-center">
+                    <h4 class="font-bold text-sm mb-0.5 en-only">Iced Matcha Latte</h4>
+                    <h4 class="font-bold text-sm mb-0.5 ar-only">ماتشا بارد</h4>
+                    <div class="flex gap-1 mb-2"><span class="allergen-tag">🍵 Uji Matcha</span><span class="allergen-tag">🥛 Dairy</span></div>
+                    <div class="flex items-center justify-between">
+                        <span class="font-black text-infrontof-accent text-sm">19 SAR</span>
+                        <button onclick="event.stopPropagation(); quickAdd('Iced Matcha Latte','ماتشا بارد',19,this)"
+                            class="glass !rounded-full px-3 py-1.5 text-xs font-bold hover:bg-infrontof-accent hover:text-white transition select-none">
+                            <span class="en-only">+ Add</span><span class="ar-only">+ أضف</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-card menu-item glass !rounded-2xl p-3 md:p-4 flex gap-3 md:gap-4" data-category="cold"
+                data-name-en="Iced Americano" data-name-ar="أمريكانو بارد"
+                data-desc-en="Chilled espresso shot diluted with ice and cold water." data-desc-ar="إسبريسو بارد مخفف بالماء والثلج."
+                data-price="13" data-img="https://images.unsplash.com/photo-1551030173-122aabc4489c?w=300&auto=format&fit=crop"
+                data-tags="" onclick="openItemModal(this)">
+                <div class="flex-grow flex flex-col justify-center">
+                    <h4 class="font-bold text-sm mb-0.5 en-only">Iced Americano</h4>
+                    <h4 class="font-bold text-sm mb-0.5 ar-only">أمريكانو بارد</h4>
+                    <div class="flex items-center justify-between">
+                        <span class="font-black text-infrontof-accent text-sm">13 SAR</span>
+                        <button onclick="event.stopPropagation(); quickAdd('Iced Americano','أمريكانو بارد',13,this)"
+                            class="glass !rounded-full px-3 py-1.5 text-xs font-bold hover:bg-infrontof-accent hover:text-white transition select-none">
+                            <span class="en-only">+ Add</span><span class="ar-only">+ أضف</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hot Drinks -->
+            <div class="menu-card menu-item glass !rounded-2xl p-3 md:p-4 flex gap-3 md:gap-4" data-category="hot"
+                data-name-en="Flat White" data-name-ar="فلات وايت"
+                data-desc-en="Double ristretto with micro-foam steamed milk. Balanced and velvety." data-desc-ar="دبل ريستريتو مع حليب كامل الدسم مبخر برغوة خفيفة."
+                data-price="15" data-img="https://images.unsplash.com/photo-1577968897966-3d4325b36b61?w=300&auto=format&fit=crop"
+                data-tags="dairy" onclick="openItemModal(this)">
+                <div class="flex-grow flex flex-col justify-center">
+                    <h4 class="font-bold text-sm mb-0.5 en-only">Flat White</h4>
+                    <h4 class="font-bold text-sm mb-0.5 ar-only">فلات وايت</h4>
+                    <div class="flex gap-1 mb-2"><span class="allergen-tag">🥛 Dairy</span></div>
+                    <div class="flex items-center justify-between">
+                        <span class="font-black text-infrontof-accent text-sm">15 SAR</span>
+                        <button onclick="event.stopPropagation(); quickAdd('Flat White','فلات وايت',15,this)"
+                            class="glass !rounded-full px-3 py-1.5 text-xs font-bold hover:bg-infrontof-accent hover:text-white transition select-none">
+                            <span class="en-only">+ Add</span><span class="ar-only">+ أضف</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-card menu-item glass !rounded-2xl p-3 md:p-4 flex gap-3 md:gap-4" data-category="hot"
+                data-name-en="V60 Pour Over" data-name-ar="قهوة مقطرة V60"
+                data-desc-en="Hand-poured filter coffee with clean, bright, and complex notes." data-desc-ar="قهوة مقطرة يدوياً بنكهة غنية ونظيفة."
+                data-price="16" data-img="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=300&auto=format&fit=crop"
+                data-tags="" onclick="openItemModal(this)">
+                <div class="flex-grow flex flex-col justify-center">
+                    <h4 class="font-bold text-sm mb-0.5 en-only">V60 Pour Over</h4>
+                    <h4 class="font-bold text-sm mb-0.5 ar-only">قهوة مقطرة V60</h4>
+                    <div class="flex items-center justify-between">
+                        <span class="font-black text-infrontof-accent text-sm">16 SAR</span>
+                        <button onclick="event.stopPropagation(); quickAdd('V60 Pour Over','قهوة مقطرة V60',16,this)"
+                            class="glass !rounded-full px-3 py-1.5 text-xs font-bold hover:bg-infrontof-accent hover:text-white transition select-none">
+                            <span class="en-only">+ Add</span><span class="ar-only">+ أضف</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-card menu-item glass !rounded-2xl p-3 md:p-4 flex gap-3 md:gap-4" data-category="hot"
+                data-name-en="Spanish Latte" data-name-ar="سبانيش لاتيه"
+                data-desc-en="Double shot espresso, sweet condensed milk, and steamed milk." data-desc-ar="دبل شوت إسبريسو، حليب مكثف محلى، حليب مبخر."
+                data-price="17" data-img="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=300&auto=format&fit=crop"
+                data-tags="dairy" onclick="openItemModal(this)">
+                <div class="flex-grow flex flex-col justify-center">
+                    <h4 class="font-bold text-sm mb-0.5 en-only">Spanish Latte</h4>
+                    <h4 class="font-bold text-sm mb-0.5 ar-only">سبانيش لاتيه</h4>
+                    <div class="flex gap-1 mb-2"><span class="allergen-tag">🥛 Dairy</span></div>
+                    <div class="flex items-center justify-between">
+                        <span class="font-black text-infrontof-accent text-sm">17 SAR</span>
+                        <button onclick="event.stopPropagation(); quickAdd('Spanish Latte','سبانيش لاتيه',17,this)"
+                            class="glass !rounded-full px-3 py-1.5 text-xs font-bold hover:bg-infrontof-accent hover:text-white transition select-none">
+                            <span class="en-only">+ Add</span><span class="ar-only">+ أضف</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Desserts & Sweets -->
+            <div class="menu-card menu-item glass !rounded-2xl p-3 md:p-4 flex gap-3 md:gap-4" data-category="bakery"
+                data-name-en="Dolce Cake" data-name-ar="دولتشي كيك"
+                data-desc-en="Rich chocolate sponge cake with caramel and cream layers." data-desc-ar="كيكة الإسفنج بالشوكولاتة مع طبقات الكراميل والكريمة الغنية."
+                data-price="25" data-img="https://images.unsplash.com/photo-1508737027454-e6454ef45afd?w=300&auto=format&fit=crop"
+                data-tags="gluten dairy" onclick="openItemModal(this)">
+                <div class="flex-grow flex flex-col justify-center">
+                    <h4 class="font-bold text-sm mb-0.5 en-only">Dolce Cake</h4>
+                    <h4 class="font-bold text-sm mb-0.5 ar-only">دولتشي كيك</h4>
+                    <div class="flex gap-1 mb-2"><span class="allergen-tag">🌾 Gluten</span><span class="allergen-tag">🥛 Dairy</span></div>
+                    <div class="flex items-center justify-between">
+                        <span class="font-black text-infrontof-accent text-sm">25 SAR</span>
+                        <button onclick="event.stopPropagation(); quickAdd('Dolce Cake','دولتشي كيك',25,this)"
+                            class="glass !rounded-full px-3 py-1.5 text-xs font-bold hover:bg-infrontof-accent hover:text-white transition select-none">
+                            <span class="en-only">+ Add</span><span class="ar-only">+ أضف</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-card menu-item glass !rounded-2xl p-3 md:p-4 flex gap-3 md:gap-4" data-category="bakery"
+                data-name-en="Tiramisu" data-name-ar="تيراميسو"
+                data-desc-en="Classic Italian tiramisu with coffee-soaked ladyfingers and mascarpone cream." data-desc-ar="تيراميسو إيطالي كلاسيكي بطبقات الكاكاو والقهوة والماسكاربوني."
+                data-price="26" data-img="https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=300&auto=format&fit=crop"
+                data-tags="gluten dairy" onclick="openItemModal(this)">
+                <div class="flex-grow flex flex-col justify-center">
+                    <h4 class="font-bold text-sm mb-0.5 en-only">Tiramisu</h4>
+                    <h4 class="font-bold text-sm mb-0.5 ar-only">تيراميسو</h4>
+                    <div class="flex gap-1 mb-2"><span class="allergen-tag">🌾 Gluten</span><span class="allergen-tag">🥛 Dairy</span></div>
+                    <div class="flex items-center justify-between">
+                        <span class="font-black text-infrontof-accent text-sm">26 SAR</span>
+                        <button onclick="event.stopPropagation(); quickAdd('Tiramisu','تيراميسو',26,this)"
+                            class="glass !rounded-full px-3 py-1.5 text-xs font-bold hover:bg-infrontof-accent hover:text-white transition select-none">
+                            <span class="en-only">+ Add</span><span class="ar-only">+ أضف</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-card menu-item glass !rounded-2xl p-3 md:p-4 flex gap-3 md:gap-4" data-category="bakery"
+                data-name-en="Pecan Pudding" data-name-ar="بودينق البيكان"
+                data-desc-en="Warm pudding with sticky pecan caramel sauce and vanilla ice cream." data-desc-ar="بودينق البيكان الدافئ الغني بصوص كراميل الزبدة والآيس كريم."
+                data-price="19" data-img="https://images.unsplash.com/photo-1551024601-bec78aea704b?w=300&auto=format&fit=crop"
+                data-tags="gluten dairy nuts" onclick="openItemModal(this)">
+                <div class="flex-grow flex flex-col justify-center">
+                    <h4 class="font-bold text-sm mb-0.5 en-only">Pecan Pudding</h4>
+                    <h4 class="font-bold text-sm mb-0.5 ar-only">بودينق البيكان</h4>
+                    <div class="flex gap-1 mb-2"><span class="allergen-tag">🌾 Gluten</span><span class="allergen-tag">🥜 Nuts</span></div>
+                    <div class="flex items-center justify-between">
+                        <span class="font-black text-infrontof-accent text-sm">19 SAR</span>
+                        <button onclick="event.stopPropagation(); quickAdd('Pecan Pudding','بودينق البيكان',19,this)"
+                            class="glass !rounded-full px-3 py-1.5 text-xs font-bold hover:bg-infrontof-accent hover:text-white transition select-none">
+                            <span class="en-only">+ Add</span><span class="ar-only">+ أضف</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-card menu-item glass !rounded-2xl p-3 md:p-4 flex gap-3 md:gap-4" data-category="bakery"
+                data-name-en="Cookies" data-name-ar="كوكيز كلاسيك"
+                data-desc-en="Soft-baked chocolate chip cookie with a gooey center." data-desc-ar="كوكيز كلاسيكي بقطع الشوكولاتة الذائبة وهش من الأطراف."
+                data-price="10" data-img="https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=300&auto=format&fit=crop"
+                data-tags="gluten dairy" onclick="openItemModal(this)">
+                <div class="flex-grow flex flex-col justify-center">
+                    <h4 class="font-bold text-sm mb-0.5 en-only">Cookies</h4>
+                    <h4 class="font-bold text-sm mb-0.5 ar-only">كوكيز كلاسيك</h4>
+                    <div class="flex gap-1 mb-2"><span class="allergen-tag">🌾 Gluten</span></div>
+                    <div class="flex items-center justify-between">
+                        <span class="font-black text-infrontof-accent text-sm">10 SAR</span>
+                        <button onclick="event.stopPropagation(); quickAdd('Cookies','كوكيز كلاسيك',10,this)"
+                            class="glass !rounded-full px-3 py-1.5 text-xs font-bold hover:bg-infrontof-accent hover:text-white transition select-none">
+                            <span class="en-only">+ Add</span><span class="ar-only">+ أضف</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>                <div class="flex gap-1 mb-2"><span class="allergen-tag">🥛 Dairy</span></div>
+                    <div class="flex items-center justify-between">
+                        <span class="font-black text-infrontof-accent text-sm">23 SAR</span>
+                        <button onclick="event.stopPropagation(); quickAdd('Rose Cardamom Latte','لاتيه الورد والهيل',23,this)"
+                            class="glass !rounded-full px-3 py-1.5 text-xs font-bold hover:bg-infrontof-accent hover:text-white transition select-none">
+                            <span class="en-only">+ Add</span><span class="ar-only">+ أضف</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="px-4 max-w-5xl mx-auto mb-12 z-10 relative reveal">
+        <div class="glass gold-border !rounded-3xl p-6 md:p-8 flex flex-col md:flex-row items-center gap-6 overflow-hidden relative">
+            <div class="absolute inset-0 bg-gradient-to-br from-infrontof-accent/5 to-transparent pointer-events-none"></div>
+            <div class="relative flex-grow text-center md:text-start rtl:md:text-end w-full">
+                <span class="text-xs font-black uppercase tracking-widest text-infrontof-accent en-only">Today's Special · Signature Combo</span>
+                <span class="text-xs font-black uppercase tracking-widest text-infrontof-accent ar-only">عرض اليوم · كومبو التوقيع</span>
+                <h3 class="font-black text-2xl mt-1 mb-2 en-only" style="font-family:'Playfair Display',serif;">Matilda Cake & Coffee Day</h3>
+                <h3 class="font-black text-2xl mt-1 mb-2 ar-only">ماتيلدا كيك وقهوة اليوم</h3>
+                <p class="text-sm opacity-60 mb-4 en-only">A slice of our signature chocolate Matilda Cake paired with cold or hot Coffee of the Day.</p>
+                <p class="text-sm opacity-60 mb-4 ar-only">شريحة من كيكة شوكولاتة ماتيلدا الشهيرة مع اختيارك من قهوة اليوم الحارة أو الباردة.</p>
+                <div class="flex items-center gap-3 justify-center md:justify-start rtl:md:justify-end">
+                    <span class="text-2xl font-black text-infrontof-accent">30 SAR</span>
+                    <span class="text-sm line-through opacity-40">36 SAR</span>
+                    <span class="bg-infrontof-accent/15 text-infrontof-accent text-xs font-black px-2.5 py-1 rounded-full">Save 16%</span>
+                </div>
+            </div>
+            <button onclick="quickAdd('Matilda & Coffee Combo','كومبو ماتيلدا وقهوة اليوم',30,this)"
+                class="ripple-btn shrink-0 w-full md:w-auto bg-infrontof-accent text-white px-8 py-4 rounded-2xl font-black shadow-lg hover:scale-105 transition text-base select-none">
+                <span class="en-only">Grab the Deal</span>
+                <span class="ar-only">اطلب العرض</span>
+            </button>
+        </div>
+    </section>
+
+    <section class="px-4 max-w-5xl mx-auto mb-16 z-10 relative reveal">
+        <h2 class="font-black text-2xl mb-6 text-center en-only">How it works</h2>
+        <h2 class="font-black text-2xl mb-6 text-center ar-only">كيف يعمل</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="glass !rounded-2xl p-6 text-center">
+                <div class="text-4xl mb-3">📱</div>
+                <h4 class="font-black mb-1 en-only">1. Order Here</h4>
+                <h4 class="font-black mb-1 ar-only">١. اطلب هنا</h4>
+                <p class="text-sm opacity-60 en-only">Build your order on this page. No account needed.</p>
+                <p class="text-sm opacity-60 ar-only">أنشئ طلبك على هذه الصفحة. لا حاجة لحساب.</p>
+            </div>
+            <div class="glass !rounded-2xl p-6 text-center">
+                <div class="text-4xl mb-3">📝</div>
+                <h4 class="font-black mb-1 en-only">2. Place Your Order</h4>
+                <h4 class="font-black mb-1 ar-only">٢. أرسل طلبك</h4>
+                <p class="text-sm opacity-60 en-only">Submit your order directly to our barista in real-time.</p>
+                <p class="text-sm opacity-60 ar-only">أرسل طلبك مباشرة إلى الباريستا في الوقت الحقيقي.</p>
+            </div>
+            <div class="glass !rounded-2xl p-6 text-center">
+                <div class="text-4xl mb-3">✅</div>
+                <h4 class="font-black mb-1 en-only">3. Track & Pick Up</h4>
+                <h4 class="font-black mb-1 ar-only">٣. تتبع واستلم</h4>
+                <p class="text-sm opacity-60 en-only">Track your order live, then pick up at the counter.</p>
+                <p class="text-sm opacity-60 ar-only">تتبع طلبك مباشرة، ثم استلم من الكاشير.</p>
+            </div>
+    </section>
+
+    <section class="py-12 max-w-full overflow-hidden relative z-10 mb-6">
+        <div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+            <div>
+                <h2 class="font-black text-3xl mb-1 en-only" style="font-family:'Playfair Display',serif;">What guests say</h2>
+                <h2 class="font-black text-3xl mb-1 ar-only">ما يقوله ضيوفنا</h2>
+                <div class="flex items-center gap-2">
+                    <span class="text-yellow-400 tracking-wider">★★★★★</span>
+                    <span class="font-black">4.9</span>
+                    <span class="text-xs opacity-40 en-only">from 200+ reviews</span>
+                    <span class="text-xs opacity-40 ar-only">من ٢٠٠+ تقييم</span>
+                </div>
+            </div>
+            <button onclick="toggleReviewModal()" class="glass !rounded-full px-5 py-2.5 font-bold text-sm hover:scale-105 transition border border-infrontof-accent/30 flex items-center justify-center gap-2 w-full sm:w-auto shrink-0 select-none">
+                <span class="text-infrontof-accent">✎</span>
+                <span class="en-only">Write a Review</span><span class="ar-only">كتابة تقييم</span>
+            </button>
+        </div>
+        <div class="marquee-wrap py-2">
+            <div id="reviewTrack" class="marquee-track"></div>
+        </div>
+    </section>
+
+    <footer class="px-4 pb-4 relative z-10">
+        <div class="glass !rounded-3xl max-w-5xl mx-auto p-6 md:p-8 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 items-center">
+                        <div>
+                <button onclick="scrollToTop()" class="flex items-center gap-2 mb-6 hover:opacity-80 transition select-none">
+                    <div class="w-10 h-10 border-2 border-infrontof-accent flex flex-col items-center justify-center text-[8px] font-black leading-none tracking-tighter p-1 rounded-sm text-infrontof-accent shrink-0 bg-transparent">
+                        <span>IN</span>
+                        <span>FRONT</span>
+                        <span>OF..</span>
+                    </div>
+                    <span class="font-black text-xl tracking-widest en-only">IN FRONT OF..</span>
+                    <span class="font-black text-xl ar-only">ان فرونت اوف</span>
+                </button>
+                <div class="grid grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <h4 class="text-xs font-black uppercase tracking-widest opacity-40 mb-2 en-only">Hours</h4>
+                        <h4 class="text-xs font-black uppercase tracking-widest opacity-40 mb-2 ar-only">أوقات العمل</h4>
+                        <p class="text-sm font-medium leading-loose en-only">Sat–Thu: 7AM–12AM<br>Fri: 12:30PM–12AM</p>
+                        <p class="text-sm font-medium leading-loose ar-only">السبت–الخميس: ٧ص–١٢م<br>الجمعة: ١٢:٣٠م–١٢م</p>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-black uppercase tracking-widest opacity-40 mb-2 en-only">Contact</h4>
+                        <h4 class="text-xs font-black uppercase tracking-widest opacity-40 mb-2 ar-only">تواصل</h4>
+                        <p class="text-sm font-medium leading-loose">
+                            <span dir="ltr" class="block">📞 +966 53 787 4042</span>
+                            <a href="https://www.instagram.com/infrontof.sa/" target="_blank" class="text-infrontof-accent hover:underline">@infrontof.sa</a>
+                        </p>
+                    </div>
+                </div>
+                <p class="text-xs opacity-30 en-only">© 2026 IN FRONT OF.. · Al Arid, Riyadh</p>
+                <p class="text-xs opacity-30 ar-only">© ٢٠٢٦ ان فرونت اوف · العارض، الرياض</p>
+            </div>
+            <div class="h-64 rounded-2xl overflow-hidden border border-black/10 dark:border-white/05">
+                <iframe src="https://maps.google.com/maps?q=24.5915062,46.6537162&t=&z=16&ie=UTF8&iwloc=&output=embed"
+                    width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" class="rounded-2xl"></iframe>
+            </div>
+        </div>
+    </footer>
+
+    <div class="fixed bottom-5 inset-x-4 md:inset-x-auto md:end-5 md:start-auto z-40 mb-[env(safe-area-inset-bottom)]">
+        <button onclick="toggleCart()" class="ripple-btn w-full md:w-auto glass-strong !bg-black/90 dark:!bg-white/10 text-white !rounded-full px-6 py-4 shadow-2xl font-bold flex items-center justify-between gap-6 hover:scale-[1.02] transition border border-white/10 select-none">
+            <span class="flex items-center gap-3">
+                <span class="text-xl">🛍</span>
+                <span class="en-only">View Cart</span><span class="ar-only">عرض السلة</span>
+                <span id="floatBadge" class="bg-infrontof-accent text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-black hidden" id="floatCount">0</span>
+            </span>
+            <span class="glass !bg-white/10 rounded-full px-4 py-1.5 text-sm font-black shrink-0">
+                <span id="floatTotal">0</span> SAR
+            </span>
+        </button>
+    </div>
+
+    <script>
+    // ── STATE ──
+    let lang = 'en', dark = false, cart = [], promoApplied = false, selectedRating = 5, searchOpen = false, notesOpen = false, upsellShown = false;
+    let currentTrackingCode = null, trackingSSE = null, trackingPollInterval = null, lastConfirmedTrackingCode = null;
+    const PROMOS = { INFO10: 10, FIRSTSIP: 15 };
+
+    // ── SEED REVIEWS (fallback if API unavailable) ──
+    const seedReviews = [
+        { name:"Ahmed S.", rating:5, text_en:"Best V60 in Al Arid. The direct-order flow is lightning fast — had my coffee in 7 minutes.", text_ar:"أفضل V60 في العارض. تجربة الطلب المباشر سريعة جداً — استلمت قهوتي في ٧ دقائق." },
+        { name:"Sara M.", rating:5, text_en:"The Matilda Cake alone is worth the visit. Always fresh, always perfect.", text_ar:"ماتيلدا كيك وحدها تستحق الزيارة. دائماً طازج ودائماً مثالي." },
+        { name:"Khalid R.", rating:4, text_en:"Great spot. Ordering ahead completely solves the morning rush — no more waiting in line.", text_ar:"مكان رائع. الطلب المسبق يحل مشكلة زحمة الصباح تماماً — لا مزيد من الانتظار." },
+        { name:"Noura A.", rating:5, text_en:"The Pistachio Latte is authentic and not overly sweet. Rare find in Riyadh. 10/10.", text_ar:"البيستاشيو لاتيه أصيل وغير حلو بشكل مفرط. نادر الوجود في الرياض. ١٠/١٠." },
+        { name:"Faisal T.", rating:5, text_en:"Rose Cardamom Latte is genius. Feels like they created it specifically for the Saudi palate.", text_ar:"لاتيه الورد والهيل عبقري. يبدو وكأنهم صنعوه خصيصاً للذوق السعودي." },
+        { name:"Reem B.", rating:5, text_en:"Love that there are zero app fees. Direct ordering means I actually get the right order every time.", text_ar:"أحب أنه لا توجد رسوم تطبيق. الطلب المباشر يعني أنني أحصل على الطلب الصحيح دائماً." },
+    ];
+
+    // ── INIT ──
+    function init() {
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) { dark = true; document.documentElement.classList.add('dark'); document.getElementById('themeIcon').textContent = '☀️'; }
+        applyLang();
+        spawnBeans();
+        setRating(5);
+        initScrollReveal();
+        initScrollNav();
+        startTimer();
+        loadReviews();
+        setTimeout(() => { document.getElementById('pageProgress').style.opacity = '0'; }, 800);
+        setTimeout(() => { if (!upsellShown) { openUpsell(); upsellShown = true; } }, 3500);
+
+        // Check URL for order tracking parameter
+        const params = new URLSearchParams(window.location.search);
+        if (params.has('track')) {
+            const trackCode = params.get('track').toUpperCase();
+            const token = params.get('token') || '';
+            if (token) {
+                setOrderToken(trackCode, token);
+            }
+            // Clear parameters to keep URL clean, but keep token in localStorage
+            window.history.replaceState({}, document.title, window.location.pathname);
+            
+            setTimeout(() => {
+                document.getElementById('trackCodeInput').value = trackCode;
+                openTrackingModal();
+                lookupOrder();
+            }, 1000);
+        }
+    }
+
+    // ── SCROLL REVEAL ──
+    function initScrollReveal() {
+        const obs = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    }
+
+    // ── SCROLL NAV ──
+    function initScrollNav() {
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('mainNav');
+            if (window.scrollY > 60) nav.classList.add('scrolled');
+            else nav.classList.remove('scrolled');
+        }, { passive: true });
+    }
+
+    // ── BREW TIMER ──
+    function startTimer() {
+        const ring = document.getElementById('timerRing');
+        const display = document.getElementById('timerDisplay');
+        const total = 8 * 60;
+        let remaining = total;
+        const circumference = 144.5;
+        setInterval(() => {
+            remaining = (remaining - 1 + total) % total || total;
+            const min = Math.floor(remaining / 60);
+            const sec = remaining % 60;
+            display.textContent = `${min}:${sec.toString().padStart(2,'0')}`;
+            ring.style.strokeDashoffset = circumference * (1 - remaining / total);
+        }, 1000);
+    }
+
+    // ── BEANS ──
+    function spawnBeans() {
+        const c = document.getElementById('particleLayer');
+        const items = ['🫘','☕','✨','🤎','🌿'];
+        for (let i = 0; i < 30; i++) {
+            const b = document.createElement('div');
+            b.className = 'bean';
+            b.textContent = items[Math.floor(Math.random() * items.length)];
+            b.style.cssText = `left:${Math.random()*100}%; animation-duration:${8+Math.random()*10}s; animation-delay:${Math.random()*12}s; font-size:${1.2+Math.random()*1.8}rem; opacity:0;`;
+            c.appendChild(b);
+        }
+    }
+
+    // ── THEME ──
+    function toggleTheme() {
+        dark = !dark;
+        document.documentElement.classList.toggle('dark', dark);
+        document.getElementById('themeIcon').textContent = dark ? '☀️' : '🌙';
+    }
+
+    // ── LANG ──
+    function toggleLang() {
+        lang = lang === 'en' ? 'ar' : 'en';
+        applyLang();
+    }
+    function applyLang() {
+        document.documentElement.lang = lang;
+        document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+        renderCart();
+    }
+
+    // ── SEARCH ──
+    function toggleSearch() {
+        searchOpen = !searchOpen;
+        const bar = document.getElementById('searchBar');
+        bar.style.maxHeight = searchOpen ? '80px' : '0';
+        if (searchOpen) { setTimeout(() => document.getElementById('searchInput').focus(), 400); }
+        else { clearSearch(); }
+    }
+    function searchMenu(q) {
+        const val = q.trim().toLowerCase();
+        let visible = 0;
+        document.querySelectorAll('.menu-item').forEach(el => {
+            const en = (el.dataset.nameEn || '').toLowerCase();
+            const ar = (el.dataset.nameAr || '').toLowerCase();
+            const desc = (el.dataset.descEn || '').toLowerCase();
+            const show = !val || en.includes(val) || ar.includes(val) || desc.includes(val);
+            el.style.display = show ? 'flex' : 'none';
+            if (show) visible++;
+        });
+        document.getElementById('noResults').classList.toggle('hidden', visible > 0);
+        document.getElementById('sigSection').style.display = val ? 'none' : '';
+    }
+    function clearSearch() {
+        document.getElementById('searchInput').value = '';
+        searchMenu('');
+        document.getElementById('sigSection').style.display = '';
+    }
+
+    // ── MENU FILTER ──
+    function filterMenu(cat) {
+        document.querySelectorAll('.menu-tab').forEach(t => { t.classList.remove('tab-active'); t.classList.add('opacity-60'); });
+        document.getElementById('tab-' + cat).classList.add('tab-active');
+        document.getElementById('tab-' + cat).classList.remove('opacity-60');
+        document.querySelectorAll('.menu-item').forEach(el => {
+            el.style.display = (cat === 'all' || el.dataset.category === cat) ? 'flex' : 'none';
+        });
+        document.getElementById('sigSection').style.display = (cat === 'all' || cat === 'cold' || cat === 'bakery') ? '' : 'none';
+        const anchor = document.getElementById('menuAnchor');
+        if (anchor) window.scrollTo({ top: anchor.getBoundingClientRect().top + window.scrollY - 100, behavior: 'smooth' });
+    }
+
+    // ── ITEM DETAIL MODAL ──
+    function openItemModal(el) {
+        const nameEn = el.dataset.nameEn, nameAr = el.dataset.nameAr;
+        const descEn = el.dataset.descEn, descAr = el.dataset.descAr;
+        const price = el.dataset.price, img = el.dataset.img;
+        const tags = el.dataset.tags || '';
+        const tagPills = tags ? tags.split(' ').map(t => `<span class="allergen-tag">${t}</span>`).join(' ') : '';
+
+        document.getElementById('itemModalContent').innerHTML = `
+            <button onclick="closeItemModal()" class="absolute top-3 end-3 w-8 h-8 bg-black/10 hover:bg-black/20 text-black dark:text-white rounded-full flex items-center justify-center z-10 text-sm font-bold select-none">✕</button>
+            <div class="p-6">
+                <div class="flex flex-wrap gap-1 mb-2">${tagPills}</div>
+                <h3 class="font-black text-xl mb-2 en-only" style="font-family:'Playfair Display',serif;">${nameEn}</h3>
+                <h3 class="font-black text-xl mb-2 ar-only">${nameAr}</h3>
+                <p class="text-sm opacity-60 mb-5 en-only">${descEn}</p>
+                <p class="text-sm opacity-60 mb-5 ar-only">${descAr}</p>
+                <div class="flex items-center gap-3">
+                    <span class="font-black text-2xl text-infrontof-accent">${price} SAR</span>
+                    <button onclick="quickAdd('${nameEn.replace(/'/g,"\\'")}','${nameAr.replace(/'/g,"\\'")}',${price},this); setTimeout(closeItemModal, 500);"
+                        class="ripple-btn flex-1 bg-infrontof-accent text-white rounded-xl py-3 font-black hover:scale-105 transition shadow-lg text-sm select-none">
+                        <span class="en-only">+ Add to Order</span><span class="ar-only">+ أضف للطلب</span>
+                    </button>
+                </div>
+            </div>`;
+        const modal = document.getElementById('itemModal');
+        modal.classList.remove('hidden'); modal.classList.add('flex');
+        document.getElementById('itemModalContent').classList.remove('modal-enter');
+        void document.getElementById('itemModalContent').offsetWidth;
+        document.getElementById('itemModalContent').classList.add('modal-enter');
+    }
+    function closeItemModal() {
+        const modal = document.getElementById('itemModal');
+        modal.classList.add('hidden'); modal.classList.remove('flex');
+    }
+
+    // ── UPSELL ──
+    function openUpsell() {
+        const m = document.getElementById('upsellModal');
+        m.classList.remove('hidden'); m.classList.add('flex');
+    }
+    function closeUpsell() {
+        document.getElementById('upsellModal').classList.replace('flex','hidden');
+    }
+    function addUpsellItem() {
+        quickAdd('Signature Pistachio Latte','بيستاشيو لاتيه خاص',28,document.querySelector('#upsellModal button:last-of-type'));
+        setTimeout(closeUpsell, 500);
+    }
+
+    // ── REVIEW MODAL ──
+    function toggleReviewModal() {
+        const m = document.getElementById('reviewModal');
+        const hidden = m.classList.contains('hidden');
+        m.classList.toggle('hidden', !hidden); m.classList.toggle('flex', hidden);
+    }
+    function setRating(val) {
+        selectedRating = val;
+        const stars = document.getElementById('starRow').children;
+        for (let i = 0; i < 5; i++) {
+            stars[i].className = `hover:scale-110 transition cursor-pointer p-2 -m-2 ${i < val ? 'text-yellow-400' : 'text-gray-300 dark:text-gray-600'}`;
+        }
+    }
+
+    // ── REVIEWS (API) ──
+    async function loadReviews() {
+        try {
+            const res = await fetch('/api/reviews');
+            const data = await res.json();
+            if (data.success && data.reviews.length > 0) {
+                renderReviewsFromData(data.reviews);
+            } else {
+                renderReviewsFromData(seedReviews);
+            }
+        } catch {
+            renderReviewsFromData(seedReviews);
+        }
+    }
+
+    function renderReviewsFromData(reviews) {
+        const track = document.getElementById('reviewTrack');
+        const colors = ['from-infrontof-accent to-yellow-600','from-blue-400 to-indigo-500','from-emerald-400 to-teal-500','from-rose-400 to-orange-400','from-purple-400 to-pink-500','from-cyan-400 to-blue-500'];
+        let html = '';
+        reviews.forEach((r, i) => {
+            const enText = r.text_en || r.enText || '';
+            const arText = r.text_ar || r.arText || enText;
+            const initial = r.initial || (r.name ? r.name[0].toUpperCase() : '?');
+            const color = r.color || colors[i % colors.length];
+            const stars = '★'.repeat(r.rating) + `<span class="opacity-20">★</span>`.repeat(5 - r.rating);
+            html += `<div class="glass !rounded-2xl p-5 w-72 shrink-0">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-9 h-9 rounded-full bg-gradient-to-br ${color} flex items-center justify-center text-white font-black text-sm">${initial}</div>
+                        <span class="font-bold text-sm">${r.name}</span>
+                    </div>
+                    <span class="text-yellow-400 text-sm tracking-wider">${stars}</span>
+                </div>
+                <p class="text-sm opacity-70 leading-relaxed en-only">${enText}</p>
+                <p class="text-sm opacity-70 leading-relaxed ar-only">${arText}</p>
+            </div>`;
+        });
+        track.innerHTML = html + html;
+    }
+
+    async function submitReview() {
+        const name = document.getElementById('revName').value.trim() || (lang === 'en' ? 'Guest' : 'ضيف');
+        const text = document.getElementById('revText').value.trim() || (lang === 'en' ? 'Great experience!' : 'تجربة رائعة!');
+        try {
+            await fetch('/api/reviews', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, rating: selectedRating, text_en: text, text_ar: text })
+            });
+        } catch {}
+        document.getElementById('revName').value = '';
+        document.getElementById('revText').value = '';
+        setRating(5);
+        toggleReviewModal();
+        loadReviews();
+        toast('✓', lang === 'en' ? 'Review posted. Thank you!' : 'تم نشر التقييم. شكراً!', 'text-green-500');
+    }
+
+    // ── SPECIAL NOTES ──
+    function toggleNotes() {
+        notesOpen = !notesOpen;
+        document.getElementById('notesBox').style.maxHeight = notesOpen ? '120px' : '0';
+        document.getElementById('notesIcon').textContent = notesOpen ? '−' : '＋';
+    }
+
+    // ── PROMO ──
+    function applyPromo() {
+        if (promoApplied) { showPromoMsg(lang === 'en' ? 'Promo already applied.' : 'الكود مطبّق بالفعل.', false); return; }
+        const code = document.getElementById('promoInput').value.trim().toUpperCase();
+        if (PROMOS[code]) {
+            promoApplied = true;
+            showPromoMsg(lang === 'en' ? `🎉 ${PROMOS[code]}% off applied!` : `🎉 خصم ${PROMOS[code]}% مطبّق!`, true);
+            renderCart();
+        } else {
+            showPromoMsg(lang === 'en' ? 'Invalid code. Try INFO10.' : 'كود غير صحيح. جرّب INFO10.', false);
+        }
+    }
+    function showPromoMsg(msg, ok) {
+        const el = document.getElementById('promoMsg');
+        el.textContent = msg;
+        el.className = `text-xs font-semibold ${ok ? 'text-emerald-500' : 'text-red-400'}`;
+        el.classList.remove('hidden');
+        setTimeout(() => { if (!ok) el.classList.add('hidden'); }, 3000);
+    }
+    function getPromoCode() {
+        return promoApplied ? document.getElementById('promoInput').value.trim().toUpperCase() : '';
+    }
+    function getPromoDiscount(total) {
+        if (!promoApplied) return 0;
+        const code = getPromoCode();
+        return Math.round(total * (PROMOS[code] || 0) / 100);
+    }
+
+    // ── CART ──
+    function toggleCart() {
+        const drawer = document.getElementById('cartDrawer');
+        const overlay = document.getElementById('cartOverlay');
+        const isOpen = drawer.classList.contains('open');
+        drawer.classList.toggle('open', !isOpen);
+        overlay.classList.toggle('hidden', isOpen);
+    }
+
+    function quickAdd(enName, arName, price, btnEl) {
+        const existing = cart.find(i => i.enName === enName);
+        if (existing) { existing.qty++; }
+        else { cart.push({ id: Date.now() + '_' + Math.random().toString(36).substr(2,5), enName, arName, price, qty: 1 }); }
+        renderCart();
+        toast('☕', lang === 'en' ? `${enName} added` : `تمت إضافة ${arName}`, 'text-infrontof-accent');
+        if (btnEl) {
+            const orig = btnEl.innerHTML;
+            btnEl.innerHTML = '✓';
+            btnEl.classList.add('bg-infrontof-accent','text-white','!border-transparent');
+            setTimeout(() => { btnEl.innerHTML = orig; btnEl.classList.remove('bg-infrontof-accent','text-white','!border-transparent'); }, 900);
+        }
+    }
+
+    function changeQty(id, delta) {
+        const item = cart.find(i => i.id === id);
+        if (!item) return;
+        item.qty += delta;
+        if (item.qty <= 0) cart = cart.filter(i => i.id !== id);
+        renderCart();
+    }
+
+    function renderCart() {
+        const container = document.getElementById('cartItems');
+        const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+        const discount = getPromoDiscount(subtotal);
+        const total = subtotal - discount;
+        const count = cart.reduce((s, i) => s + i.qty, 0);
+
+        document.getElementById('navCount').textContent = count;
+        document.getElementById('cartTotal').textContent = total;
+        document.getElementById('floatTotal').textContent = total;
+
+        const badge = document.getElementById('floatBadge');
+        badge.textContent = count;
+        badge.classList.toggle('hidden', count === 0);
+
+        const pts = Math.floor(total * 10);
+        document.getElementById('loyaltyPts').textContent = pts;
+        document.getElementById('loyaltyBar').style.width = Math.min(100, (pts / 500) * 100) + '%';
+
+        document.getElementById('orderTracker').classList.toggle('hidden', cart.length === 0);
+
+        if (discount > 0) {
+            document.getElementById('originalTotal').textContent = subtotal + ' SAR';
+            document.getElementById('originalTotal').classList.remove('hidden');
+        } else {
+            document.getElementById('originalTotal').classList.add('hidden');
+        }
+
+        if (cart.length === 0) {
+            container.innerHTML = `<div class="flex flex-col items-center justify-center h-full opacity-40 text-center gap-3 py-10"><span class="text-5xl">☕</span><p class="text-sm font-medium">${lang === 'en' ? 'Your cart is empty.<br>Add something delicious.' : 'سلتك فارغة.<br>أضف شيئاً لذيذاً.'}</p></div>`;
+            return;
+        }
+
+        container.innerHTML = cart.map(item => {
+            const name = lang === 'en' ? item.enName : item.arName;
+            return `<div class="glass !rounded-2xl p-3.5 flex items-center gap-3 item-pop" style="border:1px solid rgba(198,141,88,0.1)">
+                <div class="flex-grow">
+                    <p class="font-bold text-sm">${name}</p>
+                    <p class="text-infrontof-accent font-black text-sm mt-0.5">${item.price * item.qty} SAR</p>
+                </div>
+                <div class="flex items-center gap-1 select-none">
+                    <button onclick="changeQty('${item.id}',-1)" class="qty-btn glass">−</button>
+                    <span class="font-black text-sm w-6 text-center">${item.qty}</span>
+                    <button onclick="changeQty('${item.id}',1)" class="qty-btn glass">+</button>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    // ══════════════════════════════════════
+    //  CHECKOUT FLOW (API)
+    // ══════════════════════════════════════
+
+    function openCheckoutModal() {
+        if (!cart.length) { toast('⚠️', lang === 'en' ? 'Add items first!' : 'أضف عناصر أولاً!', 'text-yellow-500'); return; }
+        // Populate summary
+        const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+        const discount = getPromoDiscount(subtotal);
+        const total = subtotal - discount;
+        const summaryEl = document.getElementById('checkoutSummary');
+        let html = cart.map(i => {
+            const name = lang === 'en' ? i.enName : i.arName;
+            return `<div class="flex justify-between"><span class="opacity-70">${name} × ${i.qty}</span><span class="font-bold">${i.price * i.qty} SAR</span></div>`;
+        }).join('');
+        if (discount > 0) html += `<div class="flex justify-between text-emerald-500"><span>🎉 ${lang === 'en' ? 'Promo discount' : 'خصم الكود'}</span><span class="font-bold">-${discount} SAR</span></div>`;
+        html += `<div class="flex justify-between border-t border-black/10 dark:border-white/10 pt-2 mt-2"><span class="font-black">${lang === 'en' ? 'Total' : 'المجموع'}</span><span class="font-black text-infrontof-accent text-lg">${total} SAR</span></div>`;
+        summaryEl.innerHTML = html;
+
+        const m = document.getElementById('checkoutModal');
+        m.classList.remove('hidden'); m.classList.add('flex');
+    }
+
+    function closeCheckoutModal() {
+        const m = document.getElementById('checkoutModal');
+        m.classList.add('hidden'); m.classList.remove('flex');
+    }
+
+    async function submitOrder() {
+        const btn = document.getElementById('submitOrderBtn');
+        const origHTML = btn.innerHTML;
+        btn.innerHTML = `<span class="animate-spin inline-block">⏳</span> ${lang === 'en' ? 'Placing...' : 'جارٍ الإرسال...'}`;
+        btn.disabled = true;
+
+        const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+        const discount = getPromoDiscount(subtotal);
+        const total = subtotal - discount;
+        const notes = document.getElementById('specialNotes').value.trim();
+
+        const payload = {
+            items: cart.map(i => ({ name_en: i.enName, name_ar: i.arName, price: i.price, qty: i.qty })),
+            customer_name: document.getElementById('checkoutName').value.trim() || (lang === 'en' ? 'Guest' : 'ضيف'),
+            customer_phone: document.getElementById('checkoutPhone').value.trim(),
+            notes,
+            promo_code: getPromoCode()
+        };
+
+        try {
+            const res = await fetch('/api/orders', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+
+            if (data.success) {
+                lastConfirmedTrackingCode = data.order.tracking_code;
+                setOrderToken(data.order.tracking_code, data.order.secure_token); // Save secure token
+                // Show confirmation
+                document.getElementById('confirmOrderNum').textContent = data.order.order_number;
+                document.getElementById('confirmTrackCode').textContent = data.order.tracking_code;
+                closeCheckoutModal();
+                toggleCart(); // close cart drawer
+                const cm = document.getElementById('confirmModal');
+                cm.classList.remove('hidden'); cm.classList.add('flex');
+
+                // Reset cart
+                cart = [];
+                promoApplied = false;
+                document.getElementById('promoInput').value = '';
+                document.getElementById('promoMsg').classList.add('hidden');
+                document.getElementById('specialNotes').value = '';
+                document.getElementById('checkoutName').value = '';
+                document.getElementById('checkoutPhone').value = '';
+                renderCart();
+
+                toast('✅', lang === 'en' ? `Order ${data.order.order_number} placed!` : `تم إرسال الطلب ${data.order.order_number}!`, 'text-emerald-500');
+            } else {
+                toast('❌', data.error || (lang === 'en' ? 'Order failed' : 'فشل الطلب'), 'text-red-400');
+            }
+        } catch (err) {
+            toast('❌', lang === 'en' ? 'Network error. Please try again.' : 'خطأ في الشبكة. حاول مجدداً.', 'text-red-400');
+        }
+
+        btn.innerHTML = origHTML;
+        btn.disabled = false;
+    }
+
+    function closeConfirmModal() {
+        const cm = document.getElementById('confirmModal');
+        cm.classList.add('hidden'); cm.classList.remove('flex');
+    }
+
+    function closeConfirmAndTrack() {
+        closeConfirmModal();
+        if (lastConfirmedTrackingCode) {
+            document.getElementById('trackCodeInput').value = lastConfirmedTrackingCode;
+            openTrackingModal();
+            lookupOrder();
+        }
+    }
+
+    // ══════════════════════════════════════
+    //  ORDER TRACKING
+    // ══════════════════════════════════════
+
+    // Helper to get and set secure tracking tokens in localStorage
+    function getOrderToken(trackingCode) {
+        const tokens = JSON.parse(localStorage.getItem('infrontof_order_tokens') || '{}');
+        return tokens[trackingCode] || '';
+    }
+
+    function setOrderToken(trackingCode, token) {
+        const tokens = JSON.parse(localStorage.getItem('infrontof_order_tokens') || '{}');
+        tokens[trackingCode] = token;
+        localStorage.setItem('infrontof_order_tokens', JSON.stringify(tokens));
+    }
+
+    function openTrackingModal() {
+        const m = document.getElementById('trackingModal');
+        m.classList.remove('hidden'); m.classList.add('flex');
+        // If we have a saved code, auto-fill
+        const saved = localStorage.getItem('infrontof_last_track');
+        if (saved && !document.getElementById('trackCodeInput').value) {
+            document.getElementById('trackCodeInput').value = saved;
+        }
+        setTimeout(() => document.getElementById('trackCodeInput').focus(), 300);
+    }
+
+    function closeTrackingModal() {
+        const m = document.getElementById('trackingModal');
+        m.classList.add('hidden'); m.classList.remove('flex');
+        if (trackingSSE) { trackingSSE.close(); trackingSSE = null; }
+        if (trackingPollInterval) { clearInterval(trackingPollInterval); trackingPollInterval = null; }
+    }
+
+    async function lookupOrder() {
+        const code = document.getElementById('trackCodeInput').value.trim().toUpperCase();
+        if (!code) return;
+
+        const errEl = document.getElementById('trackError');
+        errEl.classList.add('hidden');
+
+        const token = getOrderToken(code);
+
+        try {
+            const res = await fetch(`/api/orders/${code}?token=${token}`);
+            
+            if (res.status === 403) {
+                errEl.textContent = lang === 'en' 
+                    ? 'Access denied. You do not have permission to view this order.' 
+                    : 'تم رفض الوصول. ليس لديك الصلاحية لعرض هذا الطلب.';
+                errEl.classList.remove('hidden');
+                return;
+            }
+
+            const data = await res.json();
+
+            if (!data.success || !data.order) {
+                errEl.textContent = lang === 'en' ? 'Order not found. Check your code.' : 'الطلب غير موجود. تحقق من الكود.';
+                errEl.classList.remove('hidden');
+                return;
+            }
+
+            currentTrackingCode = code;
+            localStorage.setItem('infrontof_last_track', code);
+            renderTrackingResult(data.order);
+            startTrackingSSE(code);
+        } catch {
+            errEl.textContent = lang === 'en' ? 'Connection error. Please try again.' : 'خطأ في الاتصال. حاول مجدداً.';
+            errEl.classList.remove('hidden');
+        }
+    }
+
+    function renderTrackingResult(order) {
+        document.getElementById('trackInputSection').classList.add('hidden');
+        document.getElementById('trackResultSection').classList.remove('hidden');
+
+        document.getElementById('trackOrderNum').textContent = order.order_number;
+
+        // Barista note
+        const noteContainer = document.getElementById('trackBaristaNoteContainer');
+        if (order.barista_note) {
+            noteContainer.innerHTML = `
+                <span class="font-black block mb-0.5 text-[10px] uppercase tracking-wider text-yellow-700 dark:text-yellow-300">
+                    📢 ${lang === 'en' ? 'Update from Barista' : 'تحديث من الباريستا'}
+                </span>
+                ${order.barista_note}
+            `;
+            noteContainer.classList.remove('hidden');
+        } else {
+            noteContainer.classList.add('hidden');
+        }
+
+        // Status badge
+        const badge = document.getElementById('trackStatusBadge');
+        const statusConfig = {
+            pending: { en: 'Pending', ar: 'قيد الانتظار', bg: 'bg-amber-500/15 text-amber-500' },
+            preparing: { en: 'Preparing', ar: 'جارٍ التحضير', bg: 'bg-blue-500/15 text-blue-500' },
+            ready: { en: 'Ready!', ar: 'جاهز!', bg: 'bg-emerald-500/15 text-emerald-500' },
+            completed: { en: 'Completed', ar: 'مكتمل', bg: 'bg-gray-500/15 text-gray-400' },
+            cancelled: { en: 'Cancelled', ar: 'ملغى', bg: 'bg-red-500/15 text-red-400' }
+        };
+        const sc = statusConfig[order.status] || statusConfig.pending;
+        badge.textContent = lang === 'en' ? sc.en : sc.ar;
+        badge.className = `inline-block text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full mb-4 ${sc.bg}`;
+
+        // Progress steps
+        const steps = ['pending', 'preparing', 'ready'];
+        const currentIdx = steps.indexOf(order.status);
+        ['trackStep1','trackStep2','trackStep3'].forEach((id, i) => {
+            const el = document.getElementById(id);
+            el.style.opacity = i <= currentIdx ? '1' : '0.3';
+            el.style.color = i <= currentIdx ? '#135c51' : '';
+        });
+        ['trackLine1','trackLine2'].forEach((id, i) => {
+            const el = document.getElementById(id);
+            el.style.background = i < currentIdx ? '#135c51' : '';
+            el.style.height = '2px';
+        });
+
+        // Items
+        const items = order.items || JSON.parse(order.items_json || '[]');
+        document.getElementById('trackItemsList').innerHTML = items.map(i => {
+            const name = lang === 'en' ? i.name_en : i.name_ar;
+            return `<div class="flex justify-between opacity-70"><span>${name} × ${i.qty}</span><span>${i.price * i.qty} SAR</span></div>`;
+        }).join('');
+
+        // Total
+        document.getElementById('trackTotal').innerHTML = `<span>${lang === 'en' ? 'Total' : 'المجموع'}</span><span class="text-infrontof-accent">${order.total} SAR</span>`;
+
+        // Cancel button visibility (only for pending)
+        const cancelBtn = document.getElementById('cancelOrderBtn');
+        cancelBtn.style.display = order.status === 'pending' ? '' : 'none';
+    }
+
+    function startTrackingSSE(code) {
+        if (trackingSSE) trackingSSE.close();
+        if (trackingPollInterval) { clearInterval(trackingPollInterval); trackingPollInterval = null; }
+        
+        const token = getOrderToken(code);
+        trackingSSE = new EventSource(`/api/sse/order/${code}?token=${token}`);
+        
+        trackingSSE.addEventListener('status_update', (e) => {
+            try {
+                const order = JSON.parse(e.data);
+                renderTrackingResult(order);
+                const statusConfig = { preparing: '☕', ready: '✅', completed: '🎉', cancelled: '❌' };
+                const emoji = statusConfig[order.status] || '📦';
+                const msgs = {
+                    preparing: { en: 'Your order is being prepared!', ar: 'جارٍ تحضير طلبك!' },
+                    ready: { en: 'Your order is ready for pickup!', ar: 'طلبك جاهز للاستلام!' },
+                    completed: { en: 'Order completed. Thank you!', ar: 'تم إكمال الطلب. شكراً!' },
+                    cancelled: { en: 'Your order was cancelled.', ar: 'تم إلغاء طلبك.' }
+                };
+                const msg = msgs[order.status];
+                if (msg) toast(emoji, lang === 'en' ? msg.en : msg.ar, order.status === 'ready' ? 'text-emerald-500' : 'text-infrontof-accent');
+            } catch {}
+        });
+
+        trackingSSE.onerror = () => {
+            // Fallback to HTTP Polling if SSE fails (e.g. on serverless Vercel)
+            trackingSSE.close();
+            trackingSSE = null;
+            console.log('⚠️ SSE connection failed/closed. Falling back to HTTP polling.');
+            
+            if (!trackingPollInterval) {
+                trackingPollInterval = setInterval(async () => {
+                    try {
+                        const res = await fetch(`/api/orders/${code}?token=${token}`);
+                        const data = await res.json();
+                        if (data.success && data.order) {
+                            renderTrackingResult(data.order);
+                        }
+                    } catch (err) {
+                        console.error('Polling error:', err);
+                    }
+                }, 8000); // Poll every 8 seconds
+            }
+        };
+    }
+
+    async function cancelTrackedOrder() {
+        if (!currentTrackingCode) return;
+        if (!confirm(lang === 'en' ? 'Are you sure you want to cancel this order?' : 'هل أنت متأكد من إلغاء هذا الطلب؟')) return;
+
+        const token = getOrderToken(currentTrackingCode);
+
+        try {
+            const res = await fetch(`/api/orders/${currentTrackingCode}/cancel?token=${token}`, { method: 'PUT' });
+            const data = await res.json();
+            if (data.success) {
+                renderTrackingResult(data.order);
+                toast('❌', lang === 'en' ? 'Order cancelled.' : 'تم إلغاء الطلب.', 'text-red-400');
+            } else {
+                toast('⚠️', data.error || (lang === 'en' ? 'Cannot cancel' : 'لا يمكن الإلغاء'), 'text-yellow-500');
+            }
+        } catch {
+            toast('❌', lang === 'en' ? 'Network error' : 'خطأ في الشبكة', 'text-red-400');
+        }
+    }
+
+    function shareOrderLink() {
+        if (!currentTrackingCode) return;
+        const token = getOrderToken(currentTrackingCode);
+        const shareUrl = `${window.location.origin}${window.location.pathname}?track=${currentTrackingCode}&token=${token}`;
+        const msg = lang === 'en' 
+            ? `Track my IN FRONT OF.. cafe order details here: ${shareUrl}` 
+            : `تتبع تفاصيل طلبي من مقهى إن فرونت أوف.. هنا: ${shareUrl}`;
+        const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
+        window.open(whatsappUrl, '_blank');
+    }
+
+    function trackAnother() {
+        document.getElementById('trackInputSection').classList.remove('hidden');
+        document.getElementById('trackResultSection').classList.add('hidden');
+        document.getElementById('trackCodeInput').value = '';
+        document.getElementById('trackError').classList.add('hidden');
+        if (trackingSSE) { trackingSSE.close(); trackingSSE = null; }
+        if (trackingPollInterval) { clearInterval(trackingPollInterval); trackingPollInterval = null; }
+        currentTrackingCode = null;
+        setTimeout(() => document.getElementById('trackCodeInput').focus(), 100);
+    }
+
+    // ── TOAST ──
+    function toast(icon, msg, colorClass) {
+        const t = document.getElementById('toast');
+        document.getElementById('toastIcon').textContent = icon;
+        document.getElementById('toastIcon').className = `text-base ${colorClass || 'text-infrontof-accent'}`;
+        document.getElementById('toastMsg').textContent = msg;
+        t.style.animation = 'none';
+        void t.offsetWidth;
+        t.style.animation = 'toastPop 3.2s cubic-bezier(0.4,0,0.2,1) forwards';
+    }
+
+    // ── UTILS ──
+    function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
+    // ── KICKOFF ──
+    init();
+    </script>
+
+</body>
+</html>
