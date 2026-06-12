@@ -32,8 +32,17 @@ if (isFirebaseMode) {
 
 // ── Local Database In-Memory State ──
 const DATA_DIR = path.join(__dirname, 'data');
-if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 const DB_PATH = path.join(DATA_DIR, 'db.json');
+
+if (!isFirebaseMode) {
+    try {
+        if (!fs.existsSync(DATA_DIR)) {
+            fs.mkdirSync(DATA_DIR, { recursive: true });
+        }
+    } catch (err) {
+        console.warn('⚠️ Warning: Could not create local database directory (expected in read-only serverless environments like Vercel).', err);
+    }
+}
 
 let localState = {
     settings: {
@@ -49,7 +58,11 @@ let localState = {
 
 // ── Helper to save local state ──
 function saveLocal() {
-    fs.writeFileSync(DB_PATH, JSON.stringify(localState, null, 2), 'utf8');
+    try {
+        fs.writeFileSync(DB_PATH, JSON.stringify(localState, null, 2), 'utf8');
+    } catch (err) {
+        console.warn('⚠️ Warning: Could not write to local database file (expected in read-only serverless environments like Vercel).', err);
+    }
 }
 
 // ── Seed Lists ──
